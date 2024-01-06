@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" class="logo">⚸</a>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <a href="/"><i class='bx bxs-home-alt-2'></i> Home</a>
+            <a href="/eph"><i class='bx bxs-planet'></i> Ephemeris</a>
+            <a href="/login"><i class='bx bxs-log-in-circle'></i> Login</a>
+        </nav>
+    </header>
+
+    <div class="wrapper">
+        <form action="" method="POST">
+            <h1>Register</h1>
+
+            <!-- Username -->
+            <div class="input-box">
+                <input type="text" placeholder="Email" name="username" required>
+                <i class='bx bxs-user'></i>
+            </div>
+
+            <!-- Password -->
+            <div class="input-box">
+                <input type="password" placeholder="Password" name="password" required>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="input-box">
+                <input type="password" placeholder="Confirm Password" name="confirm_password" required>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit">
+                <button type="submit" class="btn">Register</button>
+            </div>
+        </form>
+    </div>
+</body>

@@ -1,0 +1,136 @@
+<!-- templates/ephemeris.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/eph.css" type="text/css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Ephemeris</title>
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" class="logo">⚸</a>
+
+        <nav class="navbar">
+            <a href="/"><i class='bx bxs-home-alt-2'></i> Home</a>
+            <a href="/eph"><i class='bx bxs-planet' ></i> Ephemeris</a>
+            <a href="login"><i class='bx bxs-log-in-circle' ></i> Login</a>
+        </nav>
+    </header>
+
+    <form action="" method="post">
+        {{ form.hidden_tag()}}
+        
+        <div class="parent">
+            <!-- User Input -->
+            <div class="wrapper">
+                <h1>Ephemeris</h1>
+
+                <!-- Date -->
+                <div class="input-box">
+                    <input type="date" name="date" required>
+                </div>
+
+                <!-- Time -->
+                <div class="input-box">
+                    <input type="time" name="time" required>
+                </div>
+
+                <!-- Location -->
+                <div class="input-box">
+                    <input type="text" placeholder="Location" name="location" required>
+                </div>
+
+                <!-- Submit -->
+                <div class="submit">
+                    <button type="submit" class="btn">Submit</button>
+
+                </div>
+
+                <!-- Success / Error -->
+                <div class="success">
+                    {% if atlas_data['celestial']['Sun'] %}
+                        <label>Success! Scroll down to view results</label>
+                    {% endif %}
+                </div>
+                <div class="error">
+                    {% if form.errors %}
+                        <label>Invalid input. Please try again</label>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if atlas_data['celestial']['Sun'] %}
+                <div class="container">
+                    <h2>Ephemeris Results</h2>
+                    <div class="table">
+                        <table class="placidus">
+                            <h3>Placidus</h3>
+                            <tr>
+                                <th>House</th>
+                                <th>Longitude</th>
+                                <th>Zodiac</th>
+                                <th>Orb</th>
+                            </tr>
+
+                            {% for house, data in atlas_data['placidus'].items() %}
+                                <tr>
+                                    <td>{{ data['symbol'] }} {{ data['name'] }}</td>
+                                    <td>{{ data['longitude']|round(2) }}°</td>
+                                    <td>{{ data['zodiac_symbol'] }} {{ data['zodiac'] }}</td>
+                                    <td>{{ data['zodiac_orb'] }}°</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                        
+                        <table class="main">
+                            <h3>Main Celestials</h3>
+                            <tr>
+                                <th>Celestial Body</th>
+                                <th>Longitude</th>
+                                <th>Zodiac</th>
+                                <th>Orb</th>
+                                <th>Retrograde</th>
+                            </tr>
+
+                            {% for body, data in atlas_data['celestial'].items() %}
+                                <tr>
+                                    <td>{{ data['symbol'] }} {{ data['name'] }}</td>
+                                    <td>{{ data['longitude']|round(2) }}°</td>
+                                    <td>{{ data['zodiac_symbol'] }} {{ data['zodiac'] }}</td>
+                                    <td>{{ data['zodiac_orb'] }}°</td>
+                                    <td>{{ data['retrograde'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                        <table class="phases">
+                            <h3>Phases</h3>
+                            <tr>
+                                <th>Celestial Body</th>
+                                <th>Phase Longitude</th>
+                                <th>Phase</th>
+                            </tr>
+
+                            {% for body, data in atlas_data['celestial'].items() %}
+                                {% if data['phase'] %}
+                                    <tr>
+                                        <td>{{ data['symbol'] }} {{ data['name'] }}</td>
+                                        <td>{{ data['phase_longitude'] }}°</td>
+                                        <td>{{ data['phase'] }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
+   
+            </div>
+        </div>
+    </form>
+</body>

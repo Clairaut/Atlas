@@ -1,0 +1,183 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Space Mono', monospace;
+}
+
+.header { /* Navigation Bar */
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 30px;
+    background: transparent;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 40px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.navbar a {
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 30px;
+}
+
+/* Content */
+body {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url(/static/images/background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffffff;
+}
+
+.parent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.wrapper { /* Ephemeris Input */
+    width: 420px;
+    background: transparent;;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    margin-top: 250px;
+    margin-bottom: 250px;
+}
+
+.wrapper h1 {
+    font-size: 36px;
+    font-weight: 600;
+    font-variant: small-caps;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.input-box {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid rgba(156, 156, 156, 0.2);
+    outline: none;
+    color: #9c9c9c;
+    font-size: 18px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+}
+
+.input-box input::placeholder {
+    color: #9c9c9c;
+}
+
+.input-box input[type="date"] {
+    color: #9c9c9c;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.input-box input[type="time"] {
+    color: #9c9c9c;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 50%;
+    border: none;
+    outline: none;
+    margin: 20px auto;
+    background: #ffffff;
+    color: #000000;
+    font-size: 18px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.success {
+    color: #ffffff;
+    justify-content: center;
+}
+
+.error {
+    color: red;
+    justify-content: center;
+}
+
+/* Ephemeris Ouput */
+.container {
+    position: relative;
+    width: 1200px;
+    height: auto;
+    padding: 20px 20px;
+    justify-content: center;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 1);
+    color:#ffffff;
+}
+
+.container h2 {
+    font-size: 28px;
+    font-variant: small-caps;
+    font-weight: 600;
+    text-decoration: underline;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 100px;
+    padding: 20px 0;
+}
+
+table {
+    width: 75%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 50px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}

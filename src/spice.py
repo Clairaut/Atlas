@@ -12,9 +12,17 @@ class SpiceEphemeris:
 
 		# Celestial Kernels
 		self.celestials = '../bsp/de440s.bsp'
+		self.ceres = '../bsp/ceres.bsp'
+		self.pallas = '../bsp/pallas.bsp'
+		self.juno = '../bsp/juno.bsp'
+		self.dictionary = {'ceres': self.ceres, 'pallas': self.pallas, 'juno': self.juno}
 
 	def ecliptic(self, t, location, kernel, observer, target):
 		try:
+			for celestial in self.dictionary.keys():
+				if kernel in self.dictionary.keys():
+					kernel = self.dictionary[celestial]
+
 			# Loading kernels
 			spice.furnsh(self.leap)
 			spice.furnsh(self.pck)
@@ -49,12 +57,13 @@ class SpiceEphemeris:
 			# Checking if in retrograde
 			retro = None
 			if lon_f < lon:
-				retro = True
+				retro = '℞'
 			else:
-				retro = False
+				retro = ''
 
 			# Converting to degrees
 			lon = np.degrees(lon)
+			lon = np.mod(lon, 360)
 			lon_retro = np.degrees(lon_f)
 			lat = np.degrees(lat)
 
@@ -70,7 +79,7 @@ class SpiceEphemeris:
 			traceback.print_exc()
 			return None, None, None, None
 
-	def orbit(self, t, kernel, observer, target, duration):
+	def orbit(self, t, kernel, observer, target, duration, node):
 		try: 
 			# Loading kernels
 			spice.furnsh(self.leap)
