@@ -1,6 +1,6 @@
 from atlas import Atlas
 from aspects import aspect, house
-from topography import locator, utc
+from topo import locator, utc
 from datetime import datetime
 from tabulate import tabulate
 import traceback

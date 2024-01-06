@@ -1,5 +1,4 @@
-from spice import SpiceEphemeris
-from swiss import SwissEphemeris
+from eph import Ephemeris
 from cyclical import zodiac, phase
 import swisseph as swe
 
@@ -43,8 +42,7 @@ class Atlas:
 			}
 
 	def __init__(self):
-		self.spice_eph = SpiceEphemeris()
-		self.swiss_eph = SwissEphemeris()
+		self.eph = Ephemeris()
 
 	def placidus(self, t, location): # Geocentric | Placidus
 		t_jd = swe.julday(t.year, t.month, t.day, t.hour + t.minute/60 + t.second/3600) # Julian Date
@@ -123,16 +121,16 @@ class Atlas:
 		pluto = self.AtlasObject('Pluto', '♇')
 
 		# Location
-		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.swiss_eph.ecliptic(t, location, 'sun', None)
-		moon.distance, moon.longitude, moon.latitude, moon.retrograde = self.swiss_eph.ecliptic(t, location, 'moon', None)
-		mercury.distance, mercury.longitude, mercury.latitude, mercury.retrograde = self.swiss_eph.ecliptic(t, location, 'mercury', None)
-		venus.distance, venus.longitude, venus.latitude, venus.retrograde = self.swiss_eph.ecliptic(t, location, 'venus', None)
-		mars.distance, mars.longitude, mars.latitude, mars.retrograde = self.swiss_eph.ecliptic(t, location, 'mars', None)
-		jupiter.distance, jupiter.longitude, jupiter.latitude, jupiter.retrograde = self.swiss_eph.ecliptic(t, location, 'jupiter', None)
-		saturn.distance, saturn.longitude, saturn.latitude, saturn.retrograde = self.swiss_eph.ecliptic(t, location, 'saturn', None)
-		uranus.distance, uranus.longitude, uranus.latitude, uranus.retrograde = self.swiss_eph.ecliptic(t, location, 'uranus', None)
-		neptune.distance, neptune.longitude, neptune.latitude, neptune.retrograde = self.swiss_eph.ecliptic(t, location, 'neptune', None)
-		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.swiss_eph.ecliptic(t, location, 'pluto', None)
+		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.eph.ecliptic(t, location, 'sun', None)
+		moon.distance, moon.longitude, moon.latitude, moon.retrograde = self.eph.ecliptic(t, location, 'moon', None)
+		mercury.distance, mercury.longitude, mercury.latitude, mercury.retrograde = self.eph.ecliptic(t, location, 'mercury', None)
+		venus.distance, venus.longitude, venus.latitude, venus.retrograde = self.eph.ecliptic(t, location, 'venus', None)
+		mars.distance, mars.longitude, mars.latitude, mars.retrograde = self.eph.ecliptic(t, location, 'mars', None)
+		jupiter.distance, jupiter.longitude, jupiter.latitude, jupiter.retrograde = self.eph.ecliptic(t, location, 'jupiter', None)
+		saturn.distance, saturn.longitude, saturn.latitude, saturn.retrograde = self.eph.ecliptic(t, location, 'saturn', None)
+		uranus.distance, uranus.longitude, uranus.latitude, uranus.retrograde = self.eph.ecliptic(t, location, 'uranus', None)
+		neptune.distance, neptune.longitude, neptune.latitude, neptune.retrograde = self.eph.ecliptic(t, location, 'neptune', None)
+		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.eph.ecliptic(t, location, 'pluto', None)
 
 		# Zodiac
 		sun.zodiac, sun.zodiac_symbol, sun.zodiac_orb = zodiac(sun.longitude)
@@ -177,15 +175,15 @@ class Atlas:
 		eros = self.AtlasObject('Eros', '➳')
 
 		# Location
-		ceres.distance, ceres.longitude, ceres.latitude, ceres.retrograde = self.swiss_eph.ecliptic(t, location, 'ceres', None)
-		pallas.distance, pallas.longitude, pallas.latitude, pallas.retrograde = self.swiss_eph.ecliptic(t, location, 'pallas', None)
-		juno.distance, juno.longitude, juno.latitude, juno.retrograde = self.swiss_eph.ecliptic(t, location, 'juno', None)
-		vesta.distance, vesta.longitude, vesta.latitude, vesta.retrograde = self.swiss_eph.ecliptic(t, location, 'vesta', None)
-		astraea.distance, astraea.longitude, astraea.latitude, astraea.retrograde = self.swiss_eph.ecliptic(t, location, 'astraea', None)
-		hygiea.distance, hygiea.longitude, hygiea.latitude, hygiea.retrograde = self.swiss_eph.ecliptic(t, location, 'hygiea', None)
-		psyche.distance, psyche.longitude, psyche.latitude, psyche.retrograde = self.swiss_eph.ecliptic(t, location, 'psyche', None)
-		proserpina.distance, proserpina.longitude, proserpina.latitude, proserpina.retrograde = self.swiss_eph.ecliptic(t, location, 'proserpina', None)
-		eros.distance, eros.longitude, eros.latitude, eros.retrograde = self.swiss_eph.ecliptic(t, location, 'eros', None)
+		ceres.distance, ceres.longitude, ceres.latitude, ceres.retrograde = self.eph.ecliptic(t, location, 'ceres', None)
+		pallas.distance, pallas.longitude, pallas.latitude, pallas.retrograde = self.eph.ecliptic(t, location, 'pallas', None)
+		juno.distance, juno.longitude, juno.latitude, juno.retrograde = self.eph.ecliptic(t, location, 'juno', None)
+		vesta.distance, vesta.longitude, vesta.latitude, vesta.retrograde = self.eph.ecliptic(t, location, 'vesta', None)
+		astraea.distance, astraea.longitude, astraea.latitude, astraea.retrograde = self.eph.ecliptic(t, location, 'astraea', None)
+		hygiea.distance, hygiea.longitude, hygiea.latitude, hygiea.retrograde = self.eph.ecliptic(t, location, 'hygiea', None)
+		psyche.distance, psyche.longitude, psyche.latitude, psyche.retrograde = self.eph.ecliptic(t, location, 'psyche', None)
+		proserpina.distance, proserpina.longitude, proserpina.latitude, proserpina.retrograde = self.eph.ecliptic(t, location, 'proserpina', None)
+		eros.distance, eros.longitude, eros.latitude, eros.retrograde = self.eph.ecliptic(t, location, 'eros', None)
 
 
 		# Zodiac
@@ -217,9 +215,9 @@ class Atlas:
 		pholus = self.AtlasObject('Pholus', '⯛')
 		nessus = self.AtlasObject('Nessus', '⯜')
 
-		chiron.distance, chiron.longitude, chiron.latitude, chiron.retrograde = self.swiss_eph.ecliptic(t, location, 'chiron', None)
-		pholus.distance, pholus.longitude, pholus.latitude, pholus.retrograde = self.swiss_eph.ecliptic(t, location, 'pholus', None)
-		nessus.distance, nessus.longitude, nessus.latitude, nessus.retrograde = self.swiss_eph.ecliptic(t, location, 'nessus', None)
+		chiron.distance, chiron.longitude, chiron.latitude, chiron.retrograde = self.eph.ecliptic(t, location, 'chiron', None)
+		pholus.distance, pholus.longitude, pholus.latitude, pholus.retrograde = self.eph.ecliptic(t, location, 'pholus', None)
+		nessus.distance, nessus.longitude, nessus.latitude, nessus.retrograde = self.eph.ecliptic(t, location, 'nessus', None)
 
 		chiron.zodiac, chiron.zodiac_symbol, chiron.zodiac_orb = zodiac(chiron.longitude)
 		pholus.zodiac, pholus.zodiac_symbol, pholus.zodiac_orb = zodiac(pholus.longitude)
@@ -244,15 +242,15 @@ class Atlas:
 		gonggong = self.AtlasObject('Gonggong', '༄')
 		
 		# Location
-		quaoar.distance, quaoar.longitude, quaoar.latitude, quaoar.retrograde = self.swiss_eph.ecliptic(t, location, 'quaoar', None)
-		logos.distance, logos.longitude, logos.latitude, logos.retrograde = self.swiss_eph.ecliptic(t, location, 'logos', None)
-		sedna.distance, sedna.longitude, sedna.latitude, sedna.retrograde = self.swiss_eph.ecliptic(t, location, 'sedna', None)
-		orcus.distance, orcus.longitude, orcus.latitude, orcus.retrograde = self.swiss_eph.ecliptic(t, location, 'orcus', None)
-		salacia.distance, salacia.longitude, salacia.latitude, salacia.retrograde = self.swiss_eph.ecliptic(t, location, 'salacia', None)
-		eris.distance, eris.longitude, eris.latitude, eris.retrograde = self.swiss_eph.ecliptic(t, location, 'eris', None)
-		haumea.distance, haumea.longitude, haumea.latitude, haumea.retrograde = self.swiss_eph.ecliptic(t, location, 'haumea', None)
-		makemake.distance, makemake.longitude, makemake.latitude, makemake.retrograde = self.swiss_eph.ecliptic(t, location, 'makemake', None)
-		gonggong.distance, gonggong.longitude, gonggong.latitude, gonggong.retrograde = self.swiss_eph.ecliptic(t, location, 'gonggong', None)
+		quaoar.distance, quaoar.longitude, quaoar.latitude, quaoar.retrograde = self.eph.ecliptic(t, location, 'quaoar', None)
+		logos.distance, logos.longitude, logos.latitude, logos.retrograde = self.eph.ecliptic(t, location, 'logos', None)
+		sedna.distance, sedna.longitude, sedna.latitude, sedna.retrograde = self.eph.ecliptic(t, location, 'sedna', None)
+		orcus.distance, orcus.longitude, orcus.latitude, orcus.retrograde = self.eph.ecliptic(t, location, 'orcus', None)
+		salacia.distance, salacia.longitude, salacia.latitude, salacia.retrograde = self.eph.ecliptic(t, location, 'salacia', None)
+		eris.distance, eris.longitude, eris.latitude, eris.retrograde = self.eph.ecliptic(t, location, 'eris', None)
+		haumea.distance, haumea.longitude, haumea.latitude, haumea.retrograde = self.eph.ecliptic(t, location, 'haumea', None)
+		makemake.distance, makemake.longitude, makemake.latitude, makemake.retrograde = self.eph.ecliptic(t, location, 'makemake', None)
+		gonggong.distance, gonggong.longitude, gonggong.latitude, gonggong.retrograde = self.eph.ecliptic(t, location, 'gonggong', None)
 
 		quaoar.zodiac, quaoar.zodiac_symbol, quaoar.zodiac_orb = zodiac(quaoar.longitude)
 		logos.zodiac, logos.zodiac_symbol, logos.zodiac_orb = zodiac(logos.longitude)
@@ -286,12 +284,12 @@ class Atlas:
 		selena = self.AtlasObject('Selena', '⯝')
 
 		# Location
-		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.swiss_eph.ecliptic(t, location, 'sun', None)
-		moon.distance, moon.longitude, moon.latitude, moon.retrograde = self.swiss_eph.ecliptic(t, location, 'moon', None)
-		lunar_asc.distance, lunar_asc.longitude, lunar_asc.latitude, lunar_asc.retrograde = self.swiss_eph.ecliptic(t, location, 'rahu', None)
+		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.eph.ecliptic(t, location, 'sun', None)
+		moon.distance, moon.longitude, moon.latitude, moon.retrograde = self.eph.ecliptic(t, location, 'moon', None)
+		lunar_asc.distance, lunar_asc.longitude, lunar_asc.latitude, lunar_asc.retrograde = self.eph.ecliptic(t, location, 'rahu', None)
 		lunar_dsc.longitude = (lunar_asc.longitude + 180) % 360
-		lilith.distance, lilith.longitude, lilith.latitude, lilith.retrograde = self.swiss_eph.ecliptic(t, location, 'lilith', None)
-		selena.distance, selena.longitude, selena.latitude, selena.retrograde = self.swiss_eph.ecliptic(t, location, 'selena', None)
+		lilith.distance, lilith.longitude, lilith.latitude, lilith.retrograde = self.eph.ecliptic(t, location, 'lilith', None)
+		selena.distance, selena.longitude, selena.latitude, selena.retrograde = self.eph.ecliptic(t, location, 'selena', None)
 		
 		# Zodiac
 		moon.zodiac, moon.zodiac_symbol, moon.zodiac_orb = zodiac(moon.longitude)
@@ -328,15 +326,15 @@ class Atlas:
 		pluto = self.AtlasObject('Pluto', '♇')
 
 		# Location
-		mercury.distance, mercury.longitude, mercury.latitude, mercury.retrograde = self.swiss_eph.ecliptic(t, location, 'mercury', swe.FLG_HELCTR)
-		venus.distance, venus.longitude, venus.latitude, venus.retrograde = self.swiss_eph.ecliptic(t, location, 'venus', swe.FLG_HELCTR)
-		earth.distance, earth.longitude, earth.latitude, earth.retrograde = self.swiss_eph.ecliptic(t, location, 'earth', swe.FLG_HELCTR)
-		mars.distance, mars.longitude, mars.latitude, mars.retrograde = self.swiss_eph.ecliptic(t, location, 'mars', swe.FLG_HELCTR)
-		jupiter.distance, jupiter.longitude, jupiter.latitude, jupiter.retrograde = self.swiss_eph.ecliptic(t, location, 'jupiter', swe.FLG_HELCTR)
-		saturn.distance, saturn.longitude, saturn.latitude, saturn.retrograde = self.swiss_eph.ecliptic(t, location, 'saturn', swe.FLG_HELCTR)
-		uranus.distance, uranus.longitude, uranus.latitude, uranus.retrograde = self.swiss_eph.ecliptic(t, location, 'uranus', swe.FLG_HELCTR)
-		neptune.distance, neptune.longitude, neptune.latitude, neptune.retrograde = self.swiss_eph.ecliptic(t, location, 'neptune', swe.FLG_HELCTR)
-		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.swiss_eph.ecliptic(t, location, 'pluto', swe.FLG_HELCTR)
+		mercury.distance, mercury.longitude, mercury.latitude, mercury.retrograde = self.eph.ecliptic(t, location, 'mercury', swe.FLG_HELCTR)
+		venus.distance, venus.longitude, venus.latitude, venus.retrograde = self.eph.ecliptic(t, location, 'venus', swe.FLG_HELCTR)
+		earth.distance, earth.longitude, earth.latitude, earth.retrograde = self.eph.ecliptic(t, location, 'earth', swe.FLG_HELCTR)
+		mars.distance, mars.longitude, mars.latitude, mars.retrograde = self.eph.ecliptic(t, location, 'mars', swe.FLG_HELCTR)
+		jupiter.distance, jupiter.longitude, jupiter.latitude, jupiter.retrograde = self.eph.ecliptic(t, location, 'jupiter', swe.FLG_HELCTR)
+		saturn.distance, saturn.longitude, saturn.latitude, saturn.retrograde = self.eph.ecliptic(t, location, 'saturn', swe.FLG_HELCTR)
+		uranus.distance, uranus.longitude, uranus.latitude, uranus.retrograde = self.eph.ecliptic(t, location, 'uranus', swe.FLG_HELCTR)
+		neptune.distance, neptune.longitude, neptune.latitude, neptune.retrograde = self.eph.ecliptic(t, location, 'neptune', swe.FLG_HELCTR)
+		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.eph.ecliptic(t, location, 'pluto', swe.FLG_HELCTR)
 
 		# Zodiac
 		mercury.zodiac, mercury.zodiac_symbol, mercury.zodiac_orb = zodiac(mercury.longitude)

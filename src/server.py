@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 from datetime import datetime
 from atlas import Atlas
-from topography import locator, utc
+from topo import locator, utc
 from forms import EphemerisForm
 
 app = Flask(__name__)

@@ -109,6 +109,25 @@
                             {% endfor %}
                         </table>
 
+                        <table class="lunar">
+                            <h3>Lunar</h3>
+                            <tr>
+                                <th>Celestial Body</th>
+                                <th>Longitude</th>
+                                <th>Zodiac</th>
+                                <th>Orb</th>
+                            </tr>
+
+                            {% for body, data in atlas_data['lunar'].items() %}
+                                <tr>
+                                    <td>{{ data['symbol'] }} {{ data['name'] }}</td>
+                                    <td>{{ data['longitude']|round(2) }}°</td>
+                                    <td>{{ data['zodiac_symbol'] }} {{ data['zodiac'] }}</td>
+                                    <td>{{ data['zodiac_orb'] }}°</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+
                         <table class="phases">
                             <h3>Phases</h3>
                             <tr>
