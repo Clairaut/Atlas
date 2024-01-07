@@ -23,12 +23,12 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit(): # If form is submitted
-        user = User.query.filter_by(username=form.username.data).first() # If user exists
+        user = User.query.filter_by(email=form.email.data).first() # If user exists
         if user and user.password == form.password.data:
             login_user(user)
             return redirect(url_for('home'))
         else:
-            flash('Invalid username or password')
+            flash('Invalid email or password')
             
     return render_template('login.html', form=form)
 
@@ -47,12 +47,12 @@ def register():
     
     form = RegisterForm()
     if form.validate_on_submit(): # If form is submitted
-        existing_user = User.query.filter_by(username=form.username.data).first()
-        if existing_user is None: # If user does not exist
+        existing_email = User.query.filter_by(email=form.email.data).first()
+        if existing_email is None: # If user does not exist
             if form.password.data != form.confirm.data:
                 flash('Passwords do not match', 'Error')
                 return render_template('register.html', form=form)
-            user = User(username = form.username.data, password = form.password.data)
+            user = User(email = form.email.data, username = form.username.data, password = form.password.data)
             db.session.add(user)
 
             try: 
@@ -94,3 +94,7 @@ def ephemeris():
 
     return render_template('eph.html', form=form, atlas_data=atlas_data)
 
+# Profile Route
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    return render_template('profile.html')

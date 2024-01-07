@@ -8,11 +8,12 @@ class EphemerisForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class LoginForm(FlaskForm):
-    username = StringField('Username')
+    email = StringField('Email')
     password = StringField('Password')
     submit = SubmitField('Submit')
 
 class RegisterForm(FlaskForm):
+    email = StringField('Email')
     username = StringField('Username')
     password = PasswordField('Password')
     confirm = PasswordField('Confirm')

@@ -4,7 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(UserMixin, db.Model): # User class
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True)
+    email = db.Column(db.String(90), unique=True)
+    username = db.Column(db.String(30), unique=False)
     password = db.Column(db.String)
     is_admin = db.Column(db.Boolean, default=False)
 

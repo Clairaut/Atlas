@@ -73,6 +73,15 @@ body {
     background: transparent;
 }
 
+.content .description h3 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    text-align: center;
+    color: #ffffff;
+    margin-top: 50px;
+}
+
 .line {
     position: absolute;
     height: 2px;
