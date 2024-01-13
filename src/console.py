@@ -1,4 +1,5 @@
 from atlas import Atlas
+from chart import AtlasChart
 from aspects import aspect, house
 from topo import locator, utc
 from datetime import datetime
@@ -110,13 +111,14 @@ class AtlasWizardConsole:
 			['5', "🪐 Trans-Neptunian"],
 			['6', "☽  Lunar"],
 			['7', "★ Aspects"],
+			['8', "📈 Chart"],
 			['0', "≡  Main Menu"],
 			]
 
 			menu_tab = tabulate(menu)
 			print(menu_tab)
 
-			choices = ['0', '1', '2', '3', '4', '5', '6', '7']
+			choices = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
 			choice = input("\nChoose ephemeris:\n")
 			if choice in choices:
 				return choice
@@ -261,6 +263,7 @@ class AtlasWizardConsole:
 		5: self.neptunian,
 		6: self.lunar,
 		7: self.aspect,
+		8: lambda _: 'chart',
 		0: lambda _: 'exit'
 		}
 
@@ -301,6 +304,10 @@ class AtlasWizardConsole:
 					portal = self.portal(choice_info, atlas_data)
 					if portal == 'exit':
 						break
+					elif portal == 'chart':
+						chart = AtlasChart(atlas_data['Placidus'], atlas_data['Celestial'])
+						chart.create_chart()
+						break
 
 			elif choice_main == '2':
 				t_i = self.dt()
@@ -312,6 +319,10 @@ class AtlasWizardConsole:
 					choice_info = self.info()
 					portal = self.portal(choice_info, atlas_data)
 					if portal == 'exit':
+						break
+					elif portal == 'chart':
+						chart = AtlasChart(atlas_data['Placidus'], atlas_data['Celestial'])
+						chart.create_chart()
 						break
 
 			elif choice_main == '3':

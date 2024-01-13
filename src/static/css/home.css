@@ -43,15 +43,16 @@ body {
     font-weight: 700;
 }
 
-.container {
+.wrapper {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.content .title h1 {
+.wrapper .title h1 {
     font-size: 60px;
     font-weight: 700;
     font-variant: small-caps;
@@ -63,7 +64,7 @@ body {
     background: transparent;
 }
 
-.content .subtitle h2 {
+.wrapper .subtitle h2 {
     font-size: 30px;
     font-weight: 700;
     font-variant: small-caps;
@@ -73,15 +74,6 @@ body {
     background: transparent;
 }
 
-.content .description h3 {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 10px;
-    text-align: center;
-    color: #ffffff;
-    margin-top: 50px;
-}
-
 .line {
     position: absolute;
     height: 2px;
@@ -89,3 +81,5 @@ body {
     transform: translateY(1200%);
     background: #fff;
 }
+
+/*  */
