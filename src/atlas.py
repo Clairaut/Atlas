@@ -19,6 +19,7 @@ class Atlas:
 			self.zodiac = None
 			self.zodiac_symbol = None
 			self.zodiac_orb = None
+			self.zodiac_element = None
 
 			# Phase Information
 			self.phase = None
@@ -51,18 +52,18 @@ class Atlas:
 		cusps, ascmc = swe.houses(t_jd, location.latitude, location.longitude, b'P')
 
 		# Initialize
-		house_one = self.AtlasObject('House I', '⌂')
-		house_two = self.AtlasObject('House II', '⌂')
-		house_three = self.AtlasObject('House III', '⌂')
-		house_four = self.AtlasObject('House IV', '⌂')
-		house_five = self.AtlasObject('House V', '⌂')
-		house_six = self.AtlasObject('House VI', '⌂')
-		house_seven = self.AtlasObject('House VII', '⌂')
-		house_eight = self.AtlasObject('House VIII', '⌂')
-		house_nine = self.AtlasObject('House IX', '⌂')
-		house_ten = self.AtlasObject('House X', '⌂')
-		house_eleven = self.AtlasObject('House XI', '⌂')
-		house_twelve = self.AtlasObject('House XII', '⌂')
+		house_one = self.AtlasObject('I', '⌂')
+		house_two = self.AtlasObject('II', '⌂')
+		house_three = self.AtlasObject('III', '⌂')
+		house_four = self.AtlasObject('IV', '⌂')
+		house_five = self.AtlasObject('V', '⌂')
+		house_six = self.AtlasObject('VI', '⌂')
+		house_seven = self.AtlasObject('VII', '⌂')
+		house_eight = self.AtlasObject('VIII', '⌂')
+		house_nine = self.AtlasObject('IX', '⌂')
+		house_ten = self.AtlasObject('X', '⌂')
+		house_eleven = self.AtlasObject('XI', '⌂')
+		house_twelve = self.AtlasObject('XII', '⌂')
 
 		# Location
 		house_one.longitude = cusps[0]
@@ -79,18 +80,18 @@ class Atlas:
 		house_twelve.longitude = cusps[11]
 
 		# Zodiac
-		house_one.zodiac, house_one.zodiac_symbol, house_one.zodiac_orb = zodiac(house_one.longitude)
-		house_two.zodiac, house_two.zodiac_symbol, house_two.zodiac_orb = zodiac(house_two.longitude)
-		house_three.zodiac, house_three.zodiac_symbol, house_three.zodiac_orb = zodiac(house_three.longitude)
-		house_four.zodiac, house_four.zodiac_symbol, house_four.zodiac_orb = zodiac(house_four.longitude)
-		house_five.zodiac, house_five.zodiac_symbol, house_five.zodiac_orb = zodiac(house_five.longitude)
-		house_six.zodiac, house_six.zodiac_symbol, house_six.zodiac_orb = zodiac(house_six.longitude)
-		house_seven.zodiac, house_seven.zodiac_symbol, house_seven.zodiac_orb = zodiac(house_seven.longitude)
-		house_eight.zodiac, house_eight.zodiac_symbol, house_eight.zodiac_orb = zodiac(house_eight.longitude)
-		house_nine.zodiac, house_nine.zodiac_symbol, house_nine.zodiac_orb = zodiac(house_nine.longitude)
-		house_ten.zodiac, house_ten.zodiac_symbol, house_ten.zodiac_orb = zodiac(house_ten.longitude)
-		house_eleven.zodiac, house_eleven.zodiac_symbol, house_eleven.zodiac_orb = zodiac(house_eleven.longitude)
-		house_twelve.zodiac, house_twelve.zodiac_symbol, house_twelve.zodiac_orb = zodiac(house_twelve.longitude)
+		house_one.zodiac, house_one.zodiac_symbol, house_one.zodiac_orb, house_one.zodiac_element = zodiac(house_one.longitude)
+		house_two.zodiac, house_two.zodiac_symbol, house_two.zodiac_orb, house_two.zodiac_element = zodiac(house_two.longitude)
+		house_three.zodiac, house_three.zodiac_symbol, house_three.zodiac_orb, house_three.zodiac_element  = zodiac(house_three.longitude)
+		house_four.zodiac, house_four.zodiac_symbol, house_four.zodiac_orb, house_four.zodiac_element  = zodiac(house_four.longitude)
+		house_five.zodiac, house_five.zodiac_symbol, house_five.zodiac_orb, house_five.zodiac_element  = zodiac(house_five.longitude)
+		house_six.zodiac, house_six.zodiac_symbol, house_six.zodiac_orb, house_six.zodiac_element  = zodiac(house_six.longitude)
+		house_seven.zodiac, house_seven.zodiac_symbol, house_seven.zodiac_orb, house_seven.zodiac_element  = zodiac(house_seven.longitude)
+		house_eight.zodiac, house_eight.zodiac_symbol, house_eight.zodiac_orb, house_eight.zodiac_element = zodiac(house_eight.longitude)
+		house_nine.zodiac, house_nine.zodiac_symbol, house_nine.zodiac_orb, house_nine.zodiac_element = zodiac(house_nine.longitude)
+		house_ten.zodiac, house_ten.zodiac_symbol, house_ten.zodiac_orb, house_ten.zodiac_element = zodiac(house_ten.longitude)
+		house_eleven.zodiac, house_eleven.zodiac_symbol, house_eleven.zodiac_orb, house_eleven.zodiac_element = zodiac(house_eleven.longitude)
+		house_twelve.zodiac, house_twelve.zodiac_symbol, house_twelve.zodiac_orb, house_twelve.zodiac_element = zodiac(house_twelve.longitude)
 
 		return {
 		'I': house_one,
@@ -118,7 +119,7 @@ class Atlas:
 		saturn = self.AtlasObject('Saturn', '♄')
 		uranus = self.AtlasObject('Uranus', '♅')
 		neptune = self.AtlasObject('Neptune', '♆')
-		pluto = self.AtlasObject('Pluto', '♇')
+		pluto = self.AtlasObject('Pluto', '⯓')
 
 		# Location
 		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.eph.ecliptic(t, location, 'sun', None)
@@ -133,16 +134,16 @@ class Atlas:
 		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.eph.ecliptic(t, location, 'pluto', None)
 
 		# Zodiac
-		sun.zodiac, sun.zodiac_symbol, sun.zodiac_orb = zodiac(sun.longitude)
-		moon.zodiac, moon.zodiac_symbol, moon.zodiac_orb = zodiac(moon.longitude)
-		mercury.zodiac, mercury.zodiac_symbol, mercury.zodiac_orb = zodiac(mercury.longitude)
-		venus.zodiac, venus.zodiac_symbol, venus.zodiac_orb = zodiac(venus.longitude)
-		mars.zodiac, mars.zodiac_symbol, mars.zodiac_orb = zodiac(mars.longitude)
-		jupiter.zodiac, jupiter.zodiac_symbol, jupiter.zodiac_orb = zodiac(jupiter.longitude)
-		saturn.zodiac, saturn.zodiac_symbol, saturn.zodiac_orb = zodiac(saturn.longitude)
-		uranus.zodiac, uranus.zodiac_symbol, uranus.zodiac_orb = zodiac(uranus.longitude)
-		neptune.zodiac, neptune.zodiac_symbol, neptune.zodiac_orb = zodiac(neptune.longitude)
-		pluto.zodiac, pluto.zodiac_symbol, pluto.zodiac_orb = zodiac(pluto.longitude)
+		sun.zodiac, sun.zodiac_symbol, sun.zodiac_orb, sun.zodiac_element = zodiac(sun.longitude)
+		moon.zodiac, moon.zodiac_symbol, moon.zodiac_orb, moon.zodiac_element = zodiac(moon.longitude)
+		mercury.zodiac, mercury.zodiac_symbol, mercury.zodiac_orb, mercury.zodiac_element = zodiac(mercury.longitude)
+		venus.zodiac, venus.zodiac_symbol, venus.zodiac_orb, venus.zodiac_element = zodiac(venus.longitude)
+		mars.zodiac, mars.zodiac_symbol, mars.zodiac_orb, mars.zodiac_element = zodiac(mars.longitude)
+		jupiter.zodiac, jupiter.zodiac_symbol, jupiter.zodiac_orb, jupiter.zodiac_element = zodiac(jupiter.longitude)
+		saturn.zodiac, saturn.zodiac_symbol, saturn.zodiac_orb, saturn.zodiac_element = zodiac(saturn.longitude)
+		uranus.zodiac, uranus.zodiac_symbol, uranus.zodiac_orb, uranus.zodiac_element = zodiac(uranus.longitude)
+		neptune.zodiac, neptune.zodiac_symbol, neptune.zodiac_orb, neptune.zodiac_element = zodiac(neptune.longitude)
+		pluto.zodiac, pluto.zodiac_symbol, pluto.zodiac_orb, pluto.zodiac_element = zodiac(pluto.longitude)
 
 		# Phase
 		moon.phase, moon.phase_symbol, moon.phase_longitude = phase(moon.longitude, sun.longitude, moon.name)
@@ -187,15 +188,15 @@ class Atlas:
 
 
 		# Zodiac
-		ceres.zodiac, ceres.zodiac_symbol, ceres.zodiac_orb = zodiac(ceres.longitude)
-		pallas.zodiac, pallas.zodiac_symbol, pallas.zodiac_orb = zodiac(pallas.longitude)
-		juno.zodiac, juno.zodiac_symbol, juno.zodiac_orb = zodiac(juno.longitude)
-		vesta.zodiac, vesta.zodiac_symbol, vesta.zodiac_orb = zodiac(vesta.longitude)
-		astraea.zodiac, astraea.zodiac_symbol, astraea.zodiac_orb = zodiac(astraea.longitude)
-		hygiea.zodiac, hygiea.zodiac_symbol, hygiea.zodiac_orb = zodiac(hygiea.longitude)
-		psyche.zodiac, psyche.zodiac_symbol, psyche.zodiac_orb = zodiac(psyche.longitude)
-		proserpina.zodiac, proserpina.zodiac_symbol, proserpina.zodiac_orb = zodiac(proserpina.longitude)
-		eros.zodiac, eros.zodiac_symbol, eros.zodiac_orb = zodiac(eros.longitude)
+		ceres.zodiac, ceres.zodiac_symbol, ceres.zodiac_orb, ceres.zodiac_element = zodiac(ceres.longitude)
+		pallas.zodiac, pallas.zodiac_symbol, pallas.zodiac_orb, pallas.zodiac_element = zodiac(pallas.longitude)
+		juno.zodiac, juno.zodiac_symbol, juno.zodiac_orb, juno.zodiac_element = zodiac(juno.longitude)
+		vesta.zodiac, vesta.zodiac_symbol, vesta.zodiac_orb, vesta.zodiac_element = zodiac(vesta.longitude)
+		astraea.zodiac, astraea.zodiac_symbol, astraea.zodiac_orb, astraea.zodiac_element = zodiac(astraea.longitude)
+		hygiea.zodiac, hygiea.zodiac_symbol, hygiea.zodiac_orb, hygiea.zodiac_element = zodiac(hygiea.longitude)
+		psyche.zodiac, psyche.zodiac_symbol, psyche.zodiac_orb, psyche.zodiac_element = zodiac(psyche.longitude)
+		proserpina.zodiac, proserpina.zodiac_symbol, proserpina.zodiac_orb, proserpina.zodiac_element = zodiac(proserpina.longitude)
+		eros.zodiac, eros.zodiac_symbol, eros.zodiac_orb, eros.zodiac_element = zodiac(eros.longitude)
 
 		return {
 		'Ceres': ceres,
@@ -219,9 +220,9 @@ class Atlas:
 		pholus.distance, pholus.longitude, pholus.latitude, pholus.retrograde = self.eph.ecliptic(t, location, 'pholus', None)
 		nessus.distance, nessus.longitude, nessus.latitude, nessus.retrograde = self.eph.ecliptic(t, location, 'nessus', None)
 
-		chiron.zodiac, chiron.zodiac_symbol, chiron.zodiac_orb = zodiac(chiron.longitude)
-		pholus.zodiac, pholus.zodiac_symbol, pholus.zodiac_orb = zodiac(pholus.longitude)
-		nessus.zodiac, nessus.zodiac_symbol, nessus.zodiac_orb = zodiac(nessus.longitude)
+		chiron.zodiac, chiron.zodiac_symbol, chiron.zodiac_orb, chiron.zodiac_element = zodiac(chiron.longitude)
+		pholus.zodiac, pholus.zodiac_symbol, pholus.zodiac_orb, chiron.zodiac_element = zodiac(pholus.longitude)
+		nessus.zodiac, nessus.zodiac_symbol, nessus.zodiac_orb, chiron.zodiac_element = zodiac(nessus.longitude)
 
 		return {
 		'Chiron': chiron,
@@ -252,15 +253,15 @@ class Atlas:
 		makemake.distance, makemake.longitude, makemake.latitude, makemake.retrograde = self.eph.ecliptic(t, location, 'makemake', None)
 		gonggong.distance, gonggong.longitude, gonggong.latitude, gonggong.retrograde = self.eph.ecliptic(t, location, 'gonggong', None)
 
-		quaoar.zodiac, quaoar.zodiac_symbol, quaoar.zodiac_orb = zodiac(quaoar.longitude)
-		logos.zodiac, logos.zodiac_symbol, logos.zodiac_orb = zodiac(logos.longitude)
-		sedna.zodiac, sedna.zodiac_symbol, sedna.zodiac_orb = zodiac(sedna.longitude)
-		orcus.zodiac, orcus.zodiac_symbol, orcus.zodiac_orb = zodiac(orcus.longitude)
-		salacia.zodiac, salacia.zodiac_symbol, salacia.zodiac_orb = zodiac(salacia.longitude)
-		eris.zodiac, eris.zodiac_symbol, eris.zodiac_orb = zodiac(eris.longitude)
-		haumea.zodiac, haumea.zodiac_symbol, haumea.zodiac_orb = zodiac(haumea.longitude)
-		makemake.zodiac, makemake.zodiac_symbol, makemake.zodiac_orb = zodiac(makemake.longitude)
-		gonggong.zodiac, gonggong.zodiac_symbol, gonggong.zodiac_orb = zodiac(gonggong.longitude)
+		quaoar.zodiac, quaoar.zodiac_symbol, quaoar.zodiac_orb, quaoar.zodiac_element = zodiac(quaoar.longitude)
+		logos.zodiac, logos.zodiac_symbol, logos.zodiac_orb, logos.zodiac_element = zodiac(logos.longitude)
+		sedna.zodiac, sedna.zodiac_symbol, sedna.zodiac_orb, sedna.zodiac_element = zodiac(sedna.longitude)
+		orcus.zodiac, orcus.zodiac_symbol, orcus.zodiac_orb, orcus.zodiac_element = zodiac(orcus.longitude)
+		salacia.zodiac, salacia.zodiac_symbol, salacia.zodiac_orb, salacia.zodiac_element = zodiac(salacia.longitude)
+		eris.zodiac, eris.zodiac_symbol, eris.zodiac_orb, eris.zodiac_element = zodiac(eris.longitude)
+		haumea.zodiac, haumea.zodiac_symbol, haumea.zodiac_orb, haumea.zodiac_element = zodiac(haumea.longitude)
+		makemake.zodiac, makemake.zodiac_symbol, makemake.zodiac_orb, makemake.zodiac_element = zodiac(makemake.longitude)
+		gonggong.zodiac, gonggong.zodiac_symbol, gonggong.zodiac_orb, gonggong.zodiac_element = zodiac(gonggong.longitude)
 
 		return {
 		'Quaoar': quaoar,
@@ -287,16 +288,16 @@ class Atlas:
 		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.eph.ecliptic(t, location, 'sun', None)
 		moon.distance, moon.longitude, moon.latitude, moon.retrograde = self.eph.ecliptic(t, location, 'moon', None)
 		lunar_asc.distance, lunar_asc.longitude, lunar_asc.latitude, lunar_asc.retrograde = self.eph.ecliptic(t, location, 'rahu', None)
-		lunar_dsc.longitude = (lunar_asc.longitude + 180) % 360
+		lunar_dsc.longitude, lunar_dsc.retrograde = ((lunar_asc.longitude + 180) % 360, '℞')
 		lilith.distance, lilith.longitude, lilith.latitude, lilith.retrograde = self.eph.ecliptic(t, location, 'lilith', None)
 		selena.distance, selena.longitude, selena.latitude, selena.retrograde = self.eph.ecliptic(t, location, 'selena', None)
 		
 		# Zodiac
-		moon.zodiac, moon.zodiac_symbol, moon.zodiac_orb = zodiac(moon.longitude)
-		lunar_asc.zodiac, lunar_asc.zodiac_symbol, lunar_asc.zodiac_orb = zodiac(lunar_asc.longitude)
-		lunar_dsc.zodiac, lunar_dsc.zodiac_symbol, lunar_dsc.zodiac_orb = zodiac(lunar_dsc.longitude)
-		lilith.zodiac, lilith.zodiac_symbol, lilith.zodiac_orb = zodiac(lilith.longitude)
-		selena.zodiac, selena.zodiac_symbol, selena.zodiac_orb = zodiac(selena.longitude)
+		moon.zodiac, moon.zodiac_symbol, moon.zodiac_orb, moon.zodiac_element = zodiac(moon.longitude)
+		lunar_asc.zodiac, lunar_asc.zodiac_symbol, lunar_asc.zodiac_orb, lunar_asc.zodiac_element = zodiac(lunar_asc.longitude)
+		lunar_dsc.zodiac, lunar_dsc.zodiac_symbol, lunar_dsc.zodiac_orb, lunar_dsc.zodiac_element = zodiac(lunar_dsc.longitude)
+		lilith.zodiac, lilith.zodiac_symbol, lilith.zodiac_orb, lilith.zodiac_element = zodiac(lilith.longitude)
+		selena.zodiac, selena.zodiac_symbol, selena.zodiac_orb, selena.zodiac_element = zodiac(selena.longitude)
 
 		# Phase
 		moon.phase, moon.phase_symbol, moon.phase_longitude = phase(moon.longitude, sun.longitude, moon.name)
@@ -337,15 +338,15 @@ class Atlas:
 		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.eph.ecliptic(t, location, 'pluto', swe.FLG_HELCTR)
 
 		# Zodiac
-		mercury.zodiac, mercury.zodiac_symbol, mercury.zodiac_orb = zodiac(mercury.longitude)
-		venus.zodiac, venus.zodiac_symbol, venus.zodiac_orb = zodiac(venus.longitude)
-		earth.zodiac, earth.zodiac_symbol, earth.zodiac_orb = zodiac(earth.longitude)
-		mars.zodiac, mars.zodiac_symbol, mars.zodiac_orb = zodiac(mars.longitude)
-		jupiter.zodiac, jupiter.zodiac_symbol, jupiter.zodiac_orb = zodiac(jupiter.longitude)
-		saturn.zodiac, saturn.zodiac_symbol, saturn.zodiac_orb = zodiac(saturn.longitude)
-		uranus.zodiac, uranus.zodiac_symbol, uranus.zodiac_orb = zodiac(uranus.longitude)
-		neptune.zodiac, neptune.zodiac_symbol, neptune.zodiac_orb = zodiac(neptune.longitude)
-		pluto.zodiac, pluto.zodiac_symbol, pluto.zodiac_orb = zodiac(pluto.longitude)
+		mercury.zodiac, mercury.zodiac_symbol, mercury.zodiac_orb, mercury.zodiac_element = zodiac(mercury.longitude)
+		venus.zodiac, venus.zodiac_symbol, venus.zodiac_orb, venus.zodiac_element = zodiac(venus.longitude)
+		earth.zodiac, earth.zodiac_symbol, earth.zodiac_orb, earth.zodiac_element = zodiac(earth.longitude)
+		mars.zodiac, mars.zodiac_symbol, mars.zodiac_orb, mars.zodiac_element = zodiac(mars.longitude)
+		jupiter.zodiac, jupiter.zodiac_symbol, jupiter.zodiac_orb, jupiter.zodiac_element = zodiac(jupiter.longitude)
+		saturn.zodiac, saturn.zodiac_symbol, saturn.zodiac_orb, saturn.zodiac_element = zodiac(saturn.longitude)
+		uranus.zodiac, uranus.zodiac_symbol, uranus.zodiac_orb, uranus.zodiac_element = zodiac(uranus.longitude)
+		neptune.zodiac, neptune.zodiac_symbol, neptune.zodiac_orb, neptune.zodiac_element = zodiac(neptune.longitude)
+		pluto.zodiac, pluto.zodiac_symbol, pluto.zodiac_orb, pluto.zodiac_element = zodiac(pluto.longitude)
 
 		return {
 		'Mercury': mercury,

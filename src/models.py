@@ -1,4 +1,5 @@
 from app import db
+import uuid
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -11,6 +12,9 @@ class User(UserMixin, db.Model): # User class
 
     def get_id(self): # Return ID
         return self.id
+    
+    def get_temp_id(self): # Return temporary ID
+        return uuid.uuid4()
     
     def set_password(self, password): # Sets password
         self.password = generate_password_hash(password)

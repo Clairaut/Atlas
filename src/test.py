@@ -8,9 +8,10 @@ t = datetime.now()
 
 atlas = Atlas()
 
+lunar = atlas.lunar(t, location)
 celestials = atlas.celestial(t, location)
 houses = atlas.placidus(t, location)
 
-chart = AtlasChart(houses, celestials)
+chart = AtlasChart(houses, {**celestials, **lunar})
 
 chart.create_chart()

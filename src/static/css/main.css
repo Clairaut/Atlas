@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Space Mono', monospace;
+}
+
+body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: url(/static/images/background.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffffff;
+}
+
+.header {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 30px;
+    background: transparent;
+    z-index: 1000;
+}
+
+.navbar a {
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 30px;
+}
+
+.logo {
+    font-size: 40px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+}

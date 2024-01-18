@@ -1,5 +1,5 @@
 from atlas import Atlas
-from chart import AtlasChart
+from chart import Chart
 from aspects import aspect, house
 from topo import locator, utc
 from datetime import datetime
@@ -305,9 +305,9 @@ class AtlasWizardConsole:
 					if portal == 'exit':
 						break
 					elif portal == 'chart':
-						chart = AtlasChart(atlas_data['Placidus'], atlas_data['Celestial'])
+						chart = Chart(atlas_data['Placidus'], {**atlas_data['Celestial'], **atlas_data['Lunar']})
 						chart.create_chart()
-						break
+						continue
 
 			elif choice_main == '2':
 				t_i = self.dt()
@@ -321,9 +321,9 @@ class AtlasWizardConsole:
 					if portal == 'exit':
 						break
 					elif portal == 'chart':
-						chart = AtlasChart(atlas_data['Placidus'], atlas_data['Celestial'])
+						chart = Chart(atlas_data['Placidus'], {**atlas_data['Celestial'], **atlas_data['Lunar']})
 						chart.create_chart()
-						break
+						continue
 
 			elif choice_main == '3':
 				break

@@ -1,7 +1,9 @@
-from flask import Flask, jsonify, request, redirect, render_template, flash, url_for
+from flask import Flask, jsonify, request, redirect, render_template, flash, url_for, send_file
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
+import uuid
 from datetime import datetime
 from atlas import Atlas
+from chart import Chart
 from topo import locator, utc
 
 from app import app, db, login_manager
@@ -76,6 +78,7 @@ def home():
 # Ephemeris Route
 @app.route('/eph', methods=['GET', 'POST'])
 def ephemeris():
+    user_id = None
     form = EphemerisForm()
     atlas_data = {'celestial': {}, 'placidus': {}, 'lunar': {}}
     if form.validate_on_submit():
@@ -87,14 +90,31 @@ def ephemeris():
         t = datetime.combine(date, time)
         t = utc(t, location)
         
-        placidus = {key: object.to_dict() for key, object in atlas.placidus(t, location).items()}
-        celestial = {key: object.to_dict() for key, object in atlas.celestial(t, location).items()}
-        lunar = {key: object.to_dict() for key, object in atlas.lunar(t, location).items()}
+        placidus = atlas.placidus(t, location)
+        celestial = atlas.celestial(t, location)
+        lunar = atlas.lunar(t, location)
         atlas_data = {'placidus': placidus, 'celestial': celestial, 'lunar': lunar}
 
-    return render_template('eph.html', form=form, atlas_data=atlas_data)
+        if current_user.is_authenticated:
+            user_id = current_user.id
+        else:
+            user_id = str(uuid.uuid4())
+
+        Chart(placidus, {**celestial, **lunar}, id=user_id).create_chart(show=False)
+
+    return render_template('eph.html', form=form, atlas_data=atlas_data, user_id=user_id)
 
 # Profile Route
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     return render_template('profile.html')
+
+@app.route('/chart')
+def chart(t, location):
+    placidus = atlas.placidus(t, location)
+    celestial = atlas.celestial(t, location)
+    lunar = atlas.lunar(t, location)
+
+    Chart(placidus, {**celestial, **lunar})
+
+    return send_file(f'static/images/{datetime.now()}.png', mimetype='image/png')

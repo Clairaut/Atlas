@@ -38,7 +38,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url(/static/images/background.jpg);
+    background: url(/static/images/background.png);
     background-size: cover;
     background-position: center;
     color: #ffffff;
@@ -86,12 +86,12 @@ body {
     border: 2px solid rgba(29, 28, 28, 0.2);
     border-radius: 40px;
     font-size: 16px;
-    color: #acacac;
+    color: #ffffff;
     padding: 20px 45px 20px 20px;
 }
 
 .input-box input::placeholder { /* Hint */
-    color: #9c9c9c;
+    color: #ffffff;
 }
 
 .input-box i { /* Icon */
