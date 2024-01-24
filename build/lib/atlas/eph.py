@@ -5,26 +5,22 @@ import os
 class Ephemeris:
 	def __init__(self):
 		self.celestial_dictionary = { 
-		# Main Celestials
-		'sun': swe.SUN, 'moon': swe.MOON, 'mercury': swe.MERCURY, 'venus': swe.VENUS, 
+		
+		'sun': swe.SUN, 'moon': swe.MOON, 'mercury': swe.MERCURY, 'venus': swe.VENUS, # Main Celestials
 		'earth': swe.EARTH, 'mars': swe.MARS, 'jupiter': swe.JUPITER, 'saturn': swe.SATURN, 
 		'uranus': swe.URANUS, 'neptune': swe.NEPTUNE, 'pluto': swe.PLUTO, 
 		
-		# Asteroids
-		'ceres': swe.CERES, 'pallas': swe.PALLAS, 'juno': swe.JUNO, 'vesta': swe.VESTA, 
+		'ceres': swe.CERES, 'pallas': swe.PALLAS, 'juno': swe.JUNO, 'vesta': swe.VESTA, # Asteroids
 		'astraea': swe.AST_OFFSET+5, 'hygiea': swe.AST_OFFSET+10, 'psyche': swe.AST_OFFSET+16,
 		'proserpina': swe.AST_OFFSET+26, 'eros': swe.AST_OFFSET+433,
 		
-		# Centaur
-		'chiron': swe.CHIRON, 'pholus': swe.PHOLUS, 'nessus': swe.AST_OFFSET+7066,
+		'chiron': swe.CHIRON, 'pholus': swe.PHOLUS, 'nessus': swe.AST_OFFSET+7066, # Centaurs
 		
-		# Neptunian
-		'quaoar': swe.AST_OFFSET+50000, 'logos': swe.AST_OFFSET+58534, 'sedna': swe.AST_OFFSET+90377,
+		'quaoar': swe.AST_OFFSET+50000, 'logos': swe.AST_OFFSET+58534, 'sedna': swe.AST_OFFSET+90377, # Neptunian
 		'orcus': swe.AST_OFFSET+90482, 'salacia': swe.AST_OFFSET+120347, 'haumea': swe.AST_OFFSET+136108, 
 		'eris': swe.AST_OFFSET+136199, 'makemake': swe.AST_OFFSET+136472, 'gonggong': swe.AST_OFFSET+225088,
 		
-		# Lunar
-		'rahu': swe.MEAN_NODE, 'lilith': swe.MEAN_APOG, 'selena': swe.WHITE_MOON
+		'rahu': swe.MEAN_NODE, 'lilith': swe.MEAN_APOG, 'selena': swe.WHITE_MOON # Lunar
 		}
 
 	def placidus(self, t, location):
@@ -52,15 +48,19 @@ class Ephemeris:
 
 		if flag is None:
 			lon, lat, r, lon_speed, lat_speed, r_speed = swe.calc_ut(t_jd, target)[0]
+		elif flag==2048:
+			ra, dec, _, ra_speed, dec_speed, _ = swe.calc_ut(t_jd, target, 2048)[0]
+			return ra, dec
 		else:
 			lon, lat, r, lon_speed, lat_speed, r_speed = swe.calc_ut(t_jd, target, flag)[0]
-			
+
 		retro = None
 		if lon_speed > 0:
 			retro = ''
 		else: 
 			retro = '℞'
 
-		return r, lon, lat, retro
+		if flag is None:
+			return r, lon, lat, retro
 
 

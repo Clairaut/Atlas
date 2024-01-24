@@ -1,6 +1,8 @@
 from atlas.eph import Ephemeris
 from atlas.cyclical import zodiac, phase
+
 import swisseph as swe
+import traceback
 
 class Atlas:
 	class AtlasObject:
@@ -14,6 +16,10 @@ class Atlas:
 			self.longitude = None
 			self.latitude = None
 			self.retrograde = None
+
+			# Equatorial Information
+			self.ra = None
+			self.dec = None
 
 			# Zodiac Information
 			self.zodiac = None
@@ -49,8 +55,8 @@ class Atlas:
 			'saturn': ['Saturn', '♄'], 'uranus': ['Uranus', '♅'], 'neptune': ['Neptune', '♆'], 
 			'pluto': ['Pluto', '⯓'],
 
-			'lilith': ['Lilith', '⚸'], 'selena': ['Selena', '⯝'], 'lunar asc': ['Lunar ASC', '☊'], # Lunar
-			'lunar dsc': ['Lunar DSC', '☋'],
+			'lilith': ['Lilith', '⚸'], 'selena': ['Selena', '⯝'], 'lunar_asc': ['Lunar ASC', '☊'], # Lunar
+			'lunar_dsc': ['Lunar DSC', '☋'],
 			
 			'ceres': ['Ceres', '⚳'], 'pallas': ['Pallas', '⚴'], 'juno': ['Juno', '⚵'], # Asteroid Belt
 			'vesta': ['Vesta', '⚶'], 'astraea': ['Astraea', '⯙'], 'hygiea': ['Hygiea', '⯚'], 
@@ -71,9 +77,15 @@ class Atlas:
 			body = self.AtlasObject(target.capitalize(), '🪐')
 
 		try:
-			body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location, flag=flag)
-		except:
-			print("Error: Cannot find target")
+			if flag:
+				body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location, flag=flag)
+			else:
+				body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location)
+				body.ra, body.dec = self.eph.observe(t, target, location=location, flag=2048)
+		except Exception as e:
+			print(f"Error: {e}")
+			traceback.print_exc()
+			exit()
 		
 		body.zodiac, body.zodiac_symbol, body.zodiac_orb = zodiac(body.longitude)
 		
@@ -155,7 +167,7 @@ class Atlas:
 		neptune = self.AtlasObject('Neptune', '♆')
 		pluto = self.AtlasObject('Pluto', '⯓')
 
-		# Location
+		# Ecliptic Positions
 		sun.distance, sun.longitude, sun.latitude, sun.retrograde = self.eph.observe(t, 'sun', location=location)
 		moon.distance, moon.longitude, moon.latitude, moon.retrograde = self.eph.observe(t, 'moon', location=location)
 		mercury.distance, mercury.longitude, mercury.latitude, mercury.retrograde = self.eph.observe(t, 'mercury', location=location)

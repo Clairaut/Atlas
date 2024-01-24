@@ -11,7 +11,7 @@ setup(
     py_modules=['atlas', 'chart', 'cli', 'topo', 'eph', 'cyclical', 'console', 'aspects'],
     entry_points={
         'console_scripts': [
-            'atlas = cli:main'
+            'atlas = atlas.cli:main'
         ],
     },
     install_requires=[

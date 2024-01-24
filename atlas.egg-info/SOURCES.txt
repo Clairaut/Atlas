@@ -1,11 +1,11 @@
 MANIFEST.in
 README.md
-cli.py
 setup.py
 atlas/__init__.py
 atlas/aspects.py
 atlas/atlas.py
 atlas/chart.py
+atlas/cli.py
 atlas/console.py
 atlas/cyclical.py
 atlas/eph.py
