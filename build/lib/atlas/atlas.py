@@ -55,7 +55,7 @@ class Atlas:
 			'saturn': ['Saturn', '♄'], 'uranus': ['Uranus', '♅'], 'neptune': ['Neptune', '♆'], 
 			'pluto': ['Pluto', '⯓'],
 
-			'lilith': ['Lilith', '⚸'], 'selena': ['Selena', '⯝'], 'lunar_asc': ['Lunar ASC', '☊'], # Lunar
+			'lilith': ['Lilith', '⚸'], 'selena': ['Selena', '⯝'], 'rahu': ['Lunar ASC', '☊'], # Lunar
 			'lunar_dsc': ['Lunar DSC', '☋'],
 			
 			'ceres': ['Ceres', '⚳'], 'pallas': ['Pallas', '⚴'], 'juno': ['Juno', '⚵'], # Asteroid Belt
@@ -69,27 +69,66 @@ class Atlas:
 			'haumea': ['Haumea', '୭'], 'makemake': ['Makemake', '𓆇'], 'gonggong': ['Gonggong', '༄']
 		}
 
+		self.alternative_names = {
+			'lunar_asc': 'rahu', 'lunar_dsc': 'ketu', 'black_moon': 'lilith', 'white_moon': 'selena',
+		}
+
 	def body(self, t, target, location=None, flag=None): # Geocentric | Single/Multiple Bodies
-		target = target.lower().replace(' ', '_')
-		if target in self.celestials.keys():
+		
+		target = target.lower().replace(' ', '_') # Lowercase and replace spaces with underscores
+
+		if target in self.alternative_names.keys(): # Checks for alternative names
+			target = self.alternative_names[target]
+
+		if target in self.celestials.keys(): # Checks for correlating celestials
 			body = self.AtlasObject(self.celestials[target.lower()][0], self.celestials[target.lower()][1])
 		else:
 			body = self.AtlasObject(target.capitalize(), '🪐')
 
 		try:
 			if flag:
-				body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location, flag=flag)
+				body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location, flag=flag) # Ecliptic Coordinates
 			else:
-				body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location)
-				body.ra, body.dec = self.eph.observe(t, target, location=location, flag=2048)
+				body.distance, body.longitude, body.latitude, body.retrograde = self.eph.observe(t, target, location=location) # Ecliptic Coordinates
+				body.ra, body.dec = self.eph.observe(t, target, location=location, flag=2048) # Equatorial Coordinates
 		except Exception as e:
-			print(f"Error: {e}")
-			traceback.print_exc()
+			print(f"Error: Cannot find target \'{target}\'")
 			exit()
 		
 		body.zodiac, body.zodiac_symbol, body.zodiac_orb = zodiac(body.longitude)
 		
 		return body
+
+	def lot(self, houses, celestials): # Geocentric | Lots
+		is_day = celestials['Sun'].longitude < houses['I'].longitude
+
+		# Initialize
+		fortune = self.AtlasObject('Lot of Fortune', '🝴')
+		spirit = self.AtlasObject('Lot of Spirit', 'Φ')
+		eros = self.AtlasObject('Lot of Eros', '♡')
+
+		# Location
+		if is_day:
+			fortune.longitude = (houses['I'].longitude + (celestials['Moon'].longitude - celestials['Sun'].longitude)) % 360
+			spirit.longitude = (houses['I'].longitude + (celestials['Sun'].longitude - celestials['Moon'].longitude)) % 360
+			eros.longitude = (houses['I'].longitude + (celestials['Venus'].longitude - spirit.longitude)) % 360
+
+		else:
+			fortune.longitude = (houses['I'].longitude + (celestials['Sun'].longitude - celestials['Moon'].longitude)) % 360
+			spirit.longitude = (houses['I'].longitude + (celestials['Moon'].longitude - celestials['Sun'].longitude)) % 360
+			eros.longitude = (houses['I'].longitude + (spirit.longitude - celestials['Venus'].longitude)) % 360
+
+		# Zodiac 
+		fortune.zodiac, fortune.zodiac_symbol, fortune.zodiac_orb = zodiac(fortune.longitude)
+		spirit.zodiac, spirit.zodiac_symbol, spirit.zodiac_orb = zodiac(spirit.longitude)
+		eros.zodiac, eros.zodiac_symbol, eros.zodiac_orb = zodiac(eros.longitude)
+
+		return {
+			'Fortune': fortune,
+			'Spirit': spirit,
+			'Eros': eros
+		}
+
 
 	def placidus(self, t, location): # Geocentric | Placidus
 		t_jd = swe.julday(t.year, t.month, t.day, t.hour + t.minute/60 + t.second/3600) # Julian Date
@@ -98,16 +137,16 @@ class Atlas:
 		cusps, ascmc = swe.houses(t_jd, location.latitude, location.longitude, b'P')
 
 		# Initialize
-		house_one = self.AtlasObject('I', '⌂')
+		house_one = self.AtlasObject('I', '🜨︎')
 		house_two = self.AtlasObject('II', '⌂')
 		house_three = self.AtlasObject('III', '⌂')
-		house_four = self.AtlasObject('IV', '⌂')
+		house_four = self.AtlasObject('IV', '🜨︎')
 		house_five = self.AtlasObject('V', '⌂')
 		house_six = self.AtlasObject('VI', '⌂')
-		house_seven = self.AtlasObject('VII', '⌂')
+		house_seven = self.AtlasObject('VII', '🜨︎')
 		house_eight = self.AtlasObject('VIII', '⌂')
 		house_nine = self.AtlasObject('IX', '⌂')
-		house_ten = self.AtlasObject('X', '⌂')
+		house_ten = self.AtlasObject('X', '🜨︎')
 		house_eleven = self.AtlasObject('XI', '⌂')
 		house_twelve = self.AtlasObject('XII', '⌂')
 
@@ -220,6 +259,7 @@ class Atlas:
 		psyche = self.AtlasObject('Psyche', 'Ψ')
 		proserpina = self.AtlasObject('Proserpina', '⯘')
 		eros = self.AtlasObject('Eros', '➳')
+		icarus = self.AtlasObject('Icarus', '🛩')
 
 		# Location
 		ceres.distance, ceres.longitude, ceres.latitude, ceres.retrograde = self.eph.observe(t, 'ceres', location=location)
@@ -231,6 +271,7 @@ class Atlas:
 		psyche.distance, psyche.longitude, psyche.latitude, psyche.retrograde = self.eph.observe(t, 'psyche', location=location)
 		proserpina.distance, proserpina.longitude, proserpina.latitude, proserpina.retrograde = self.eph.observe(t, 'proserpina', location=location)
 		eros.distance, eros.longitude, eros.latitude, eros.retrograde = self.eph.observe(t, 'eros', location=location)
+		icarus.distance, icarus.longitude, icarus.latitude, icarus.retrograde = self.eph.observe(t, 'icarus', location=location)
 
 
 		# Zodiac
@@ -243,6 +284,7 @@ class Atlas:
 		psyche.zodiac, psyche.zodiac_symbol, psyche.zodiac_orb = zodiac(psyche.longitude)
 		proserpina.zodiac, proserpina.zodiac_symbol, proserpina.zodiac_orb = zodiac(proserpina.longitude)
 		eros.zodiac, eros.zodiac_symbol, eros.zodiac_orb = zodiac(eros.longitude)
+		icarus.zodiac, icarus.zodiac_symbol, icarus.zodiac_orb = zodiac(icarus.longitude)
 
 		return {
 		'Ceres': ceres,
@@ -253,7 +295,8 @@ class Atlas:
 		'Hygiea': hygiea,
 		'Psyche': psyche,
 		'Proserpina': proserpina,
-		'Eros': eros
+		'Eros': eros,
+		'Icarus': icarus
 		}
 
 	def centaur(self, t, location): # Geocentric | Centaurs
@@ -278,15 +321,15 @@ class Atlas:
 
 	def neptunian(self, t, location): # Geocentric | Trans-Neptunian Objects
 		# Initialize
-		quaoar = self.AtlasObject('Quaoar', '✧')
+		quaoar = self.AtlasObject('Quaoar', '🝾')
 		logos = self.AtlasObject('Logos & Zoe', '†')
 		sedna = self.AtlasObject('Sedna', '⯲')
-		orcus = self.AtlasObject('Orcus', '🗝')
+		orcus = self.AtlasObject('Orcus', '🝿')
 		salacia = self.AtlasObject('Salacia', '∿')
 		eris = self.AtlasObject('Eris', '⯱')
-		haumea = self.AtlasObject('Haumea', '୭')
-		makemake = self.AtlasObject('Makemake', '𓆇')
-		gonggong = self.AtlasObject('Gonggong', '༄')
+		haumea = self.AtlasObject('Haumea', '🝻')
+		makemake = self.AtlasObject('Makemake', '🝼')
+		gonggong = self.AtlasObject('Gonggong', '🝽')
 		
 		# Location
 		quaoar.distance, quaoar.longitude, quaoar.latitude, quaoar.retrograde = self.eph.observe(t, 'quaoar', location=location)
@@ -353,55 +396,8 @@ class Atlas:
 		selena.phase, selena.phase_symbol, selena.phase_longitude = phase(selena.longitude, sun.longitude, selena.name)
 
 		return {
-		'Moon': moon,
 		'ASC': lunar_asc,
 		'DSC': lunar_dsc,
 		'Lilith': lilith,
 		'Selena': selena,
-		}
-
-	def helio_main(self, t, location): # Heliocentric | Main Celestials
-		# Initialize
-		mercury = self.AtlasObject('Mercury', '☿')
-		venus = self.AtlasObject('Venus', '♀')
-		earth = self.AtlasObject('Earth', '♁')
-		mars = self.AtlasObject('Mars', '♂')
-		jupiter = self.AtlasObject('Jupiter', '♃')
-		saturn = self.AtlasObject('Saturn', '♄')
-		uranus = self.AtlasObject('Uranus', '♅')
-		neptune = self.AtlasObject('Neptune', '♆')
-		pluto = self.AtlasObject('Pluto', '♇')
-
-		# Location
-		mercury.distance, mercury.longitude, mercury.latitude, mercury.retrograde = self.eph.observe(t, 'mercury', swe.FLG_HELCTR)
-		venus.distance, venus.longitude, venus.latitude, venus.retrograde = self.eph.observe(t, 'venus', swe.FLG_HELCTR)
-		earth.distance, earth.longitude, earth.latitude, earth.retrograde = self.eph.observe(t, 'earth', swe.FLG_HELCTR)
-		mars.distance, mars.longitude, mars.latitude, mars.retrograde = self.eph.observe(t, 'mars', swe.FLG_HELCTR)
-		jupiter.distance, jupiter.longitude, jupiter.latitude, jupiter.retrograde = self.eph.observe(t, 'jupiter', swe.FLG_HELCTR)
-		saturn.distance, saturn.longitude, saturn.latitude, saturn.retrograde = self.eph.observe(t, 'saturn', swe.FLG_HELCTR)
-		uranus.distance, uranus.longitude, uranus.latitude, uranus.retrograde = self.eph.observe(t, 'uranus', swe.FLG_HELCTR)
-		neptune.distance, neptune.longitude, neptune.latitude, neptune.retrograde = self.eph.observe(t, 'neptune', swe.FLG_HELCTR)
-		pluto.distance, pluto.longitude, pluto.latitude, pluto.retrograde = self.eph.observe(t, 'pluto', swe.FLG_HELCTR)
-
-		# Zodiac
-		mercury.zodiac, mercury.zodiac_symbol, mercury.zodiac_orb = zodiac(mercury.longitude)
-		venus.zodiac, venus.zodiac_symbol, venus.zodiac_orb = zodiac(venus.longitude)
-		earth.zodiac, earth.zodiac_symbol, earth.zodiac_orb = zodiac(earth.longitude)
-		mars.zodiac, mars.zodiac_symbol, mars.zodiac_orb = zodiac(mars.longitude)
-		jupiter.zodiac, jupiter.zodiac_symbol, jupiter.zodiac_orb = zodiac(jupiter.longitude)
-		saturn.zodiac, saturn.zodiac_symbol, saturn.zodiac_orb = zodiac(saturn.longitude)
-		uranus.zodiac, uranus.zodiac_symbol, uranus.zodiac_orb = zodiac(uranus.longitude)
-		neptune.zodiac, neptune.zodiac_symbol, neptune.zodiac_orb = zodiac(neptune.longitude)
-		pluto.zodiac, pluto.zodiac_symbol, pluto.zodiac_orb = zodiac(pluto.longitude)
-
-		return {
-		'Mercury': mercury,
-		'Venus': venus,
-		'Earth': earth,
-		'Mars': mars,
-		'Jupiter': jupiter,
-		'Saturn': saturn,
-		'Uranus': uranus,
-		'Neptune': neptune,
-		'Pluto': pluto
 		}

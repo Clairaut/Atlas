@@ -18,8 +18,8 @@ def handle_observe(args):
         print('Error: Invalid date/time')
         exit()
     
-    results = [[f"{result.symbol} {result.name}", f"{round(result.distance, 3)} AU,", f"{round(result.ra, 2)}°", f"{round(result.dec, 2)}°"] for target in args.target for result in [atlas.body(t, target, args.location)]]
-    print(tabulate(results, headers=['Body', 'Dist', 'RA (Deg)', 'Dec']))
+    results = [[f"{result.symbol} {result.name}", f"{round(result.distance, 3)} AU", f"{round(result.ra, 2)}°", f"{round(result.dec, 2)}°", f"{round(result.longitude, 2)}°", f"{round(result.latitude, 2)}°"] for target in args.target for result in [atlas.body(t, target, args.location)]]
+    print(tabulate(results, headers=['Body', 'Dist', 'RA (Deg)', 'Dec', 'Longitude', 'Latitude']))
 
 def handle_align(args):
     try:
@@ -39,7 +39,10 @@ def handle_chart(args):
         exit()
 
     houses = atlas.placidus(t, args.location)
-    celestials = atlas.celestial(t, args.location)
+    main = atlas.celestial(t, args.location)
+    lunar = atlas.lunar(t, args.location)
+    lots = atlas.lot(houses, main)
+    celestials = {**main, **lunar, **lots}
     chart = Chart(houses, celestials) # Generate Chart
     chart.generate(show=True, save=args.save)
 
@@ -49,7 +52,7 @@ def handle_console(args):
 
 def main():
     # Top level parser
-    parser = argparse.ArgumentParser(description='Atlas Wizard')
+    parser = argparse.ArgumentParser(description='Atlas | Swiss Ephemeris Python Wrapper')
     subparsers = parser.add_subparsers(dest='command')
 
     # 'Observe' command

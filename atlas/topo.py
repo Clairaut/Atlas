@@ -9,7 +9,7 @@ class Location:
 		self.latitude = latitude
 
 def locator(city):
-	geolocator = Nominatim(user_agent="AtlasWizard", timeout=500)
+	geolocator = Nominatim(user_agent="Atlas", timeout=500)
 	location = geolocator.geocode(city)
 	return location
 

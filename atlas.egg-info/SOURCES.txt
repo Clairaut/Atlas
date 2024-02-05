@@ -15,6 +15,7 @@ atlas.egg-info/SOURCES.txt
 atlas.egg-info/dependency_links.txt
 atlas.egg-info/entry_points.txt
 atlas.egg-info/top_level.txt
+atlas/config/config.ini
 atlas/eph/s120347s.se1
 atlas/eph/s136108s.se1
 atlas/eph/s136199s.se1
@@ -25,6 +26,7 @@ atlas/eph/se00010s.se1
 atlas/eph/se00016s.se1
 atlas/eph/se00026s.se1
 atlas/eph/se00433s.se1
+atlas/eph/se01566s.se1
 atlas/eph/se07066s.se1
 atlas/eph/se50000s.se1
 atlas/eph/se58534s.se1

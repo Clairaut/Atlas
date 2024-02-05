@@ -12,7 +12,7 @@ class Ephemeris:
 		
 		'ceres': swe.CERES, 'pallas': swe.PALLAS, 'juno': swe.JUNO, 'vesta': swe.VESTA, # Asteroids
 		'astraea': swe.AST_OFFSET+5, 'hygiea': swe.AST_OFFSET+10, 'psyche': swe.AST_OFFSET+16,
-		'proserpina': swe.AST_OFFSET+26, 'eros': swe.AST_OFFSET+433,
+		'proserpina': swe.AST_OFFSET+26, 'eros': swe.AST_OFFSET+433, 'icarus': swe.AST_OFFSET+1566,
 		
 		'chiron': swe.CHIRON, 'pholus': swe.PHOLUS, 'nessus': swe.AST_OFFSET+7066, # Centaurs
 		
@@ -41,8 +41,6 @@ class Ephemeris:
 
 		if target.lower() in self.celestial_dictionary.keys():
 			target = self.celestial_dictionary[target]
-		else:
-			print("Error: Cannot find target")
 
 		t_jd = swe.julday(t.year, t.month, t.day, t.hour + t.minute/60 + t.second/3600)
 

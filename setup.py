@@ -6,7 +6,7 @@ setup(
     version='0.1.0',
     description='An interface for Swiss Ephemeris',
     packages=find_packages(include=['atlas*']),
-    package_data={'atlas': ['eph/*', 'static/*/*']},
+    package_data={'atlas': ['eph/*', 'static/*/*', 'config/*']},
     include_package_data=True,
     py_modules=['atlas', 'chart', 'cli', 'topo', 'eph', 'cyclical', 'console', 'aspects'],
     entry_points={

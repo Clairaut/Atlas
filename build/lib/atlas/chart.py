@@ -2,20 +2,22 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import numpy as np
 import os
+from atlas.aspects import aspect
 
 class Chart:
     def __init__(self, houses, celestials, id=0):
         self.houses = houses
         self.celestials = celestials
+        self.aspects = aspect(celestials)
         self.id=id
-
+        
         if self.houses:
             self.asc = self.houses['I'].longitude
             self.dsc = self.houses['VII'].longitude
             self.mc = self.houses['X'].longitude
             self.ic = self.houses['IV'].longitude
         else:
-            self.asc = 0
+            self.asc = np.pi
             
         self.ascmc = {'House I': self.houses['I'], 'House VII': self.houses['VII'], 'House X': self.houses['X'], 'House IV': self.houses['IV']}
 
@@ -55,7 +57,7 @@ class Chart:
             outer_radius = (0.8 + length / 2) + length
             self.draw_line(angle + rotation, inner_radius, outer_radius, linewidth)
 
-    def draw_zodiac(self):
+    def draw_zodiacs(self):
         # Initializing zodiac boundaries
         for angle in self.zodiac_angles:
             self.draw_line(angle, 0.8, 1)
@@ -79,7 +81,7 @@ class Chart:
         if self.houses:
             # House boundaries
             for house in self.houses.values():
-                self.draw_line(np.radians(house.longitude) - np.radians(self.asc) + np.pi, 0.3, 0.4, linewidth=0.25)
+                self.draw_line(np.radians(house.longitude) - np.radians(self.asc) + np.pi, 0.3, 0.8, linewidth=0.25)
 
             # House labels
             for i, angle in enumerate(self.house_longitudes):
@@ -119,11 +121,41 @@ class Chart:
             y = np.sin(np.radians(self.houses['IV'].longitude) - np.radians(self.asc) + np.pi)*0.35
             self.ax.text(x, y, 'IC', ha='center', va='center', fontsize=7, weight='bold', color='white', backgroundcolor=(1, 1, 1, 0))
 
+
+    def draw_aspects(self):
+        for body, aspects in self.aspects.items():
+            for aspect in aspects:
+                if body.name in self.celestials and aspect[1].name in self.celestials:
+                    body_one_angle = np.radians(self.celestials[body.name].longitude) - np.radians(self.asc) + np.pi
+                    body_two_angle = np.radians(self.celestials[aspect[1].name].longitude) - np.radians(self.asc) + np.pi
+
+                    body_one_x = np.cos(body_one_angle)*0.275
+                    body_one_y = np.sin(body_one_angle)*0.275
+
+                    body_two_x = np.cos(body_two_angle)*0.275
+                    body_two_y = np.sin(body_two_angle)*0.275
+                    
+                    if aspect[0] == 'Opposition':
+                        self.ax.plot([body_one_x, body_two_x], [body_one_y, body_two_y], color='#756AB6', linewidth=0.5)
+                        #self.ax.text((body_one_x + body_two_x)/2, (body_one_y + body_two_y)/2, '☍', ha='center', va='center', fontsize=12, color='white')
+                    elif aspect[0] == 'Trine':
+                        self.ax.plot([body_one_x, body_two_x], [body_one_y, body_two_y], color='#AC87C5', linewidth=0.5)
+                        #self.ax.text((body_one_x + body_two_x)/2, (body_one_y + body_two_y)/2, '△', ha='center', va='center', fontsize=12, color='white')
+                    elif aspect[0] == 'Square':
+                        self.ax.plot([body_one_x, body_two_x], [body_one_y, body_two_y], color='#E0AED0', linewidth=0.5)
+                        #self.ax.text((body_one_x + body_two_x)/2, (body_one_y + body_two_y)/2, '□', ha='center', va='center', fontsize=12, color='white')
+                    elif aspect[0] == 'Sextile':
+                        self.ax.plot([body_one_x, body_two_x], [body_one_y, body_two_y], color='#FFE5E5', linewidth=0.5)
+                        #self.ax.text((body_one_x + body_two_x)/2, (body_one_y + body_two_y)/2, '✶', ha='center', va='center', fontsize=12, color='white')
+
+
+
     def draw_celestial(self, celestial, color='white'):
         angle = np.radians(celestial.longitude) - np.radians(self.asc) + np.pi
         
         # Celestial Tick
-        self.draw_line(angle, 0.75, 0.8, color=color)
+        self.draw_line(angle, 0.775, 0.8, color=color)
+        self.draw_line(angle, 0.275, 0.3, color=color)
         
         # Celestial Label Position Adjustment
         for node in self.nodes.values():
@@ -147,7 +179,6 @@ class Chart:
                         angle += 0.01
                     diff = abs(angle - node_angle)
 
-
         # Celestial Symbol Label
         x = np.cos(angle)
         y = np.sin(angle)
@@ -160,7 +191,8 @@ class Chart:
     # Create chart
     def generate(self, show=False, save=False):
         self.draw_houses()
-        self.draw_zodiac()
+        self.draw_zodiacs()
+        self.draw_aspects()
 
         # Drawing Chart
         self.draw_circle(1)
@@ -177,6 +209,9 @@ class Chart:
             self.draw_line(0, 0.4, 0.8, linewidth=1.5) # Descendant
             self.draw_line(np.radians(self.houses['X'].longitude) - np.radians(self.asc) + np.pi, 0.4, 0.8, linewidth=1.5) # Medium Coeli
             self.draw_line(np.radians(self.houses['IV'].longitude) - np.radians(self.asc) + np.pi, 0.4, 0.8, linewidth=1.5) # Imum Coeli
+
+        
+
 
         # Drawing Celestials
         for celestial in self.celestials.values():

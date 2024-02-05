@@ -2,8 +2,10 @@ from atlas.atlas import Atlas
 from atlas.chart import Chart
 from atlas.aspects import aspect, house
 from atlas.topo import locator, utc
+from PyInquirer import prompt, Token, style_from_dict
 from datetime import datetime
 from tabulate import tabulate
+import configparser
 import traceback
 import os
 
@@ -11,7 +13,21 @@ import os
 class Console:
 	def __init__(self):
 		self.atlas = Atlas()
-		self.aspect_symbols = {'Opposition': '☍ Opposition', 'Trine': '△ Trine', 'Square': '□ Square', 'Sextile': '⚹ Sextile', 'Conjunction': '☌ Conjunction'}
+		self.aspect_symbols = {'Opposition': '☍ Opposition', 'Trine': '△ Trine', 'Square': '□ Square', 
+						 'Sextile': '⚹ Sextile', 'Conjunction': '☌ Conjunction'}
+		self.config = configparser.ConfigParser()
+		
+		config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config/config.ini')
+		self.config.read(config_path)
+
+		self.prompt_style = style_from_dict({
+			Token.Separator: '#6C6C6C',
+			Token.QuestionMark: '#AC87C5 bold',
+			Token.Selected: '#E0AED0',
+			Token.Pointer: '#FF9D00 bold',
+			Token.Instruction: '',
+			Token.Answer: '#5F819D bold',
+		})
 
 	def clear(self):
 		if os.name == 'nt':
@@ -31,14 +47,15 @@ class Console:
 			menu = [
 			['1', "⏲ Today's Ephemeris"],
 			['2', "🗓 Ephemeris"],
-			['3', "≡ Exit"],
+			['3', "⚙ Configuration"],
+			['4', "≡ Exit"],
 			]
 
 			menu_tab = tabulate(menu)
 			print(menu_tab)
 
 			# User Input
-			choices = ['1', '2', '3']
+			choices = ['1', '2', '3', '4']
 			choice = input("\n Choose menu option:\n")
 			if choice in choices:
 				self.clear()
@@ -88,7 +105,6 @@ class Console:
 					location = locator(choice)
 					self.clear()
 					return location
-					break
 					
 				except Exception as e:
 					print(f"Error: {e}")
@@ -110,39 +126,122 @@ class Console:
 			['4', "⚷  Centaur"],
 			['5', "🪐 Trans-Neptunian"],
 			['6', "☽  Lunar"],
-			['7', "★ Aspects"],
-			['8', "📈 Chart"],
+			['7', "🝴  Lots"],
+			['8', "★ Aspects"],
+			['9', "📈 Chart"],
 			['0', "≡  Main Menu"],
 			]
 
 			menu_tab = tabulate(menu)
 			print(menu_tab)
 
-			choices = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+			choices = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 			choice = input("\nChoose ephemeris:\n")
 			if choice in choices:
 				return choice
-				break
+			else:
+				self.clear()
+				print("Error: Invalid Input")
+				continue
+	
+	def config_menu(self):
+		self.clear()
+		while True:
+			print("""
+|====================|
+| ⚙ Configuration ⚙ |
+|====================|
+		 """)
+			
+			menu = [
+			['1', "📈 Chart Settings"],
+			['2', "≡ Main Menu"]
+			]
+
+			menu_tab = tabulate(menu)
+			print(menu_tab)
+
+			choices = ['1', '2']
+			choice = input("\nChoose configuration:\n")
+			if choice in choices:
+				return choice
 			else:
 				self.clear()
 				print("Error: Invalid Input")
 				continue
 
-	def placidus(self, atlas_data):
-		placidus = [
-		["🜨︎ I", f"{atlas_data['Placidus']['I'].symbol} {atlas_data['Placidus']['I'].zodiac}", f"{atlas_data['Placidus']['I'].zodiac_orb}°"],
-		["⌂ II", f"{atlas_data['Placidus']['II'].symbol} {atlas_data['Placidus']['II'].zodiac}", f"{atlas_data['Placidus']['II'].zodiac_orb}°"],
-		["⌂ III", f"{atlas_data['Placidus']['III'].symbol} {atlas_data['Placidus']['III'].zodiac}", f"{atlas_data['Placidus']['III'].zodiac_orb}°"],
-		["🜨︎ IV", f"{atlas_data['Placidus']['IV'].symbol} {atlas_data['Placidus']['IV'].zodiac}", f"{atlas_data['Placidus']['IV'].zodiac_orb}°"],
-		["⌂ V", f"{atlas_data['Placidus']['V'].symbol} {atlas_data['Placidus']['V'].zodiac}", f"{atlas_data['Placidus']['V'].zodiac_orb}°"],
-		["⌂ VI", f"{atlas_data['Placidus']['VI'].symbol} {atlas_data['Placidus']['VI'].zodiac}", f"{atlas_data['Placidus']['VI'].zodiac_orb}°"],
-		["🜨︎ VII", f"{atlas_data['Placidus']['VII'].symbol} {atlas_data['Placidus']['VII'].zodiac}", f"{atlas_data['Placidus']['VII'].zodiac_orb}°"],
-		["⌂ VIII", f"{atlas_data['Placidus']['VIII'].symbol} {atlas_data['Placidus']['VIII'].zodiac}", f"{atlas_data['Placidus']['VIII'].zodiac_orb}°"],
-		["⌂ IX", f"{atlas_data['Placidus']['IX'].symbol} {atlas_data['Placidus']['IX'].zodiac}", f"{atlas_data['Placidus']['IX'].zodiac_orb}°"],
-		["🜨︎ X", f"{atlas_data['Placidus']['X'].symbol} {atlas_data['Placidus']['X'].zodiac}", f"{atlas_data['Placidus']['X'].zodiac_orb}°"],
-		["⌂ XI", f"{atlas_data['Placidus']['XI'].symbol} {atlas_data['Placidus']['XI'].zodiac}", f"{atlas_data['Placidus']['XI'].zodiac_orb}°"],
-		["⌂ XII", f"{atlas_data['Placidus']['XII'].symbol} {atlas_data['Placidus']['XII'].zodiac}", f"{atlas_data['Placidus']['XII'].zodiac_orb}°"],
+	def config_chart(self):
+		self.clear()
+		while True:
+			print("""
+|======================|
+| 📈 Chart Settings 📈 |
+|======================|
+		 """)
+			
+			menu = [
+			['1', "🪐 Bodies"],
+			['2', "≡ Configuration Menu"]
+			]
+
+			menu_tab = tabulate(menu)
+			print(menu_tab)
+
+			choices = ['1', '2']
+			choice = input("\nChoose configuration:\n")
+			if choice in choices:
+				return choice
+			else:
+				self.clear()
+				print("Error: Invalid Input")
+				continue
+
+	def config_chart_bodies(self):
+		self.clear()
+
+		visible_bodies = self.config['Chart']['bodies'].split(', ')
+
+		questions = [
+			{
+			'type': 'checkbox',
+			'message': 'Select Celestial Bodies',
+			'name': 'Celestial Bodies',
+			'choices': [
+				{'name': '☉ Sun', 'checked': '☉ Sun' in visible_bodies},
+				{'name': '☽ Moon', 'checked': '☽ Moon' in visible_bodies},
+				{'name': '☿ Mercury', 'checked': '☿ Mercury' in visible_bodies},
+				{'name': '♀ Venus', 'checked': '♀ Venus' in visible_bodies},
+				{'name': '♂ Mars', 'checked': '♂ Mars' in visible_bodies},
+				{'name': '♃ Jupiter', 'checked': '♃ Jupiter' in visible_bodies},
+				{'name': '♄ Saturn', 'checked': '♄ Saturn' in visible_bodies},
+				{'name': '♅ Uranus', 'checked': '♅ Uranus' in visible_bodies},
+				{'name': '♆ Neptune', 'checked': '♆ Neptune' in visible_bodies},
+				{'name': '⯓ Pluto', 'checked': '⯓ Pluto' in visible_bodies},
+				{'name': '⚸ Lilith', 'checked': '⚸ Lilith' in visible_bodies},
+				{'name': '⯝ Selena', 'checked': '⯝ Selena' in visible_bodies},
+				{'name': '☊ Lunar ASC', 'checked': '☊ Lunar ASC' in visible_bodies},
+				{'name': '☋ Lunar DSC', 'checked': '☋ Lunar DSC' in visible_bodies},
+				{'name': '⚳ Ceres', 'checked': '⚳ Ceres' in visible_bodies},
+				{'name': '⚴ Pallas', 'checked': '⚴ Pallas' in visible_bodies},
+				{'name': '⚵ Juno', 'checked': '⚵ Juno' in visible_bodies},
+				{'name': '⚶ Vesta', 'checked': '⚶ Vesta' in visible_bodies},
+				{'name': '⯙ Astraea', 'checked': '⯙ Astraea' in visible_bodies},
+				{'name': '⚷ Chiron', 'checked': '⚷ Chiron' in visible_bodies},
+			],
+			'validate': lambda answer: 'You must choose at least one body.' if len(answer) == 0 else True,
+			}
 		]
+
+		answers = prompt(questions, style=self.prompt_style)
+
+		self.config['Chart']['bodies'] = ', '.join(answers['Celestial Bodies'])
+		with open('config.ini', 'w') as configfile:
+			self.config.write(configfile)
+
+			
+
+	def placidus(self, atlas_data):
+		placidus = [[f"{house.symbol} {house.name}", f"{house.zodiac_symbol} {house.zodiac}", f"{house.zodiac_orb}°"] for house in atlas_data['Placidus'].values()]
 
 		celestial = [
 		["☉ Sun", f"{atlas_data['House']['Sun']}"],
@@ -167,79 +266,45 @@ class Console:
 		print(celestial_tab)
 
 	def celestial(self, atlas_data):
-		celestial = [
-		["☉ Sun", f"{atlas_data['Celestial']['Sun'].zodiac_symbol} {atlas_data['Celestial']['Sun'].zodiac}", f"{atlas_data['Celestial']['Sun'].zodiac_orb}°", f"{atlas_data['Celestial']['Sun'].retrograde}"],
-		["☽ Moon", f"{atlas_data['Celestial']['Moon'].zodiac_symbol} {atlas_data['Celestial']['Moon'].zodiac}", f"{atlas_data['Celestial']['Moon'].zodiac_orb}°", f"{atlas_data['Celestial']['Moon'].retrograde}"],
-		["☿ Mercury", f"{atlas_data['Celestial']['Mercury'].zodiac_symbol} {atlas_data['Celestial']['Mercury'].zodiac}", f"{atlas_data['Celestial']['Mercury'].zodiac_orb}°", f"{atlas_data['Celestial']['Mercury'].retrograde}"],
-		["♀ Venus", f"{atlas_data['Celestial']['Venus'].zodiac_symbol} {atlas_data['Celestial']['Venus'].zodiac}", f"{atlas_data['Celestial']['Venus'].zodiac_orb}°", f"{atlas_data['Celestial']['Venus'].retrograde}"],
-		["♂ Mars", f"{atlas_data['Celestial']['Mars'].zodiac_symbol} {atlas_data['Celestial']['Mars'].zodiac}", f"{atlas_data['Celestial']['Mars'].zodiac_orb}°", f"{atlas_data['Celestial']['Mars'].retrograde}"],
-		["♃ Jupiter", f"{atlas_data['Celestial']['Jupiter'].zodiac_symbol} {atlas_data['Celestial']['Jupiter'].zodiac}", f"{atlas_data['Celestial']['Jupiter'].zodiac_orb}°", f"{atlas_data['Celestial']['Jupiter'].retrograde}"],
-		["♄ Saturn", f"{atlas_data['Celestial']['Saturn'].zodiac_symbol} {atlas_data['Celestial']['Saturn'].zodiac}", f"{atlas_data['Celestial']['Saturn'].zodiac_orb}°", f"{atlas_data['Celestial']['Saturn'].retrograde}"],
-		["♅ Uranus", f"{atlas_data['Celestial']['Uranus'].zodiac_symbol} {atlas_data['Celestial']['Uranus'].zodiac}", f"{atlas_data['Celestial']['Uranus'].zodiac_orb}°", f"{atlas_data['Celestial']['Uranus'].retrograde}"],
-		["♆ Neptune", f"{atlas_data['Celestial']['Neptune'].zodiac_symbol} {atlas_data['Celestial']['Neptune'].zodiac}", f"{atlas_data['Celestial']['Neptune'].zodiac_orb}°", f"{atlas_data['Celestial']['Neptune'].retrograde}"],
-		["⯓ Pluto", f"{atlas_data['Celestial']['Pluto'].zodiac_symbol} {atlas_data['Celestial']['Pluto'].zodiac}", f"{atlas_data['Celestial']['Pluto'].zodiac_orb}°", f"{atlas_data['Celestial']['Pluto'].retrograde}"],
-		]
+		celestial = [[f"{body.symbol} {body.name}", f"{body.zodiac_symbol} {body.zodiac}", f"{body.zodiac_orb}°", f"{body.retrograde}"] for body in atlas_data['Celestial'].values()]
 
 		celestial_tab = tabulate(celestial, headers=['Celestial Body', 'Zodiac', 'Orb', 'Retrograde'])
 		print(celestial_tab)
 
 	def asteroid(self, atlas_data):
-		asteroid =[
-		["⚳ Ceres", f"{atlas_data['Asteroid']['Ceres'].zodiac_symbol} {atlas_data['Asteroid']['Ceres'].zodiac}", f"{atlas_data['Asteroid']['Ceres'].zodiac_orb}°", f"{atlas_data['Asteroid']['Ceres'].retrograde}"],
-		["⚴ Pallas", f"{atlas_data['Asteroid']['Pallas'].zodiac_symbol} {atlas_data['Asteroid']['Pallas'].zodiac}", f"{atlas_data['Asteroid']['Pallas'].zodiac_orb}°", f"{atlas_data['Asteroid']['Pallas'].retrograde}"],
-		["⚵ Juno", f"{atlas_data['Asteroid']['Juno'].zodiac_symbol} {atlas_data['Asteroid']['Juno'].zodiac}", f"{atlas_data['Asteroid']['Juno'].zodiac_orb}°", f"{atlas_data['Asteroid']['Juno'].retrograde}"],
-		["⚶ Vesta", f"{atlas_data['Asteroid']['Vesta'].zodiac_symbol} {atlas_data['Asteroid']['Vesta'].zodiac}", f"{atlas_data['Asteroid']['Vesta'].zodiac_orb}°", f"{atlas_data['Asteroid']['Vesta'].retrograde}"],
-		["⯙ Astraea", f"{atlas_data['Asteroid']['Astraea'].zodiac_symbol} {atlas_data['Asteroid']['Astraea'].zodiac}", f"{atlas_data['Asteroid']['Astraea'].zodiac_orb}°", f"{atlas_data['Asteroid']['Astraea'].retrograde}"],
-		["⯚ Hygiea", f"{atlas_data['Asteroid']['Hygiea'].zodiac_symbol} {atlas_data['Asteroid']['Hygiea'].zodiac}", f"{atlas_data['Asteroid']['Hygiea'].zodiac_orb}°", f"{atlas_data['Asteroid']['Hygiea'].retrograde}"],
-		["Ψ Psyche", f"{atlas_data['Asteroid']['Psyche'].zodiac_symbol} {atlas_data['Asteroid']['Psyche'].zodiac}", f"{atlas_data['Asteroid']['Psyche'].zodiac_orb}°", f"{atlas_data['Asteroid']['Hygiea'].retrograde}"],
-		["⯘ Proserpina", f"{atlas_data['Asteroid']['Proserpina'].zodiac_symbol} {atlas_data['Asteroid']['Proserpina'].zodiac}", f"{atlas_data['Asteroid']['Proserpina'].zodiac_orb}°", f"{atlas_data['Asteroid']['Hygiea'].retrograde}"],
-		["➳ Eros", f"{atlas_data['Asteroid']['Eros'].zodiac_symbol} {atlas_data['Asteroid']['Eros'].zodiac}", f"{atlas_data['Asteroid']['Eros'].zodiac_orb}°", f"{atlas_data['Asteroid']['Hygiea'].retrograde}"],
-		]
+		asteroid = [[f"{body.symbol} {body.name}", f"{body.zodiac_symbol} {body.zodiac}", f"{body.zodiac_orb}°", f"{body.retrograde}"] for body in atlas_data['Asteroid'].values()]
 
 		asteroid_tab = tabulate(asteroid, headers=['Celestial Body', 'Zodiac', 'Orb', 'Retrograde'])
 		print(asteroid_tab)
 
 	def centaur(self, atlas_data):
-		centaur = [
-		["⚷ Chiron", f"{atlas_data['Centaur']['Chiron'].zodiac_symbol} {atlas_data['Centaur']['Chiron'].zodiac}", f"{atlas_data['Centaur']['Chiron'].zodiac_orb}°", f"{atlas_data['Centaur']['Chiron'].retrograde}"],
-		["⯛ Pholus", f"{atlas_data['Centaur']['Pholus'].zodiac_symbol} {atlas_data['Centaur']['Pholus'].zodiac}", f"{atlas_data['Centaur']['Pholus'].zodiac_orb}°", f"{atlas_data['Centaur']['Pholus'].retrograde}"],
-		["⯜ Nessus", f"{atlas_data['Centaur']['Nessus'].zodiac_symbol} {atlas_data['Centaur']['Nessus'].zodiac}", f"{atlas_data['Centaur']['Nessus'].zodiac_orb}°", f"{atlas_data['Centaur']['Nessus'].retrograde}"],
-		]
+		centaur = [[f"{body.symbol} {body.name}", f"{body.zodiac_symbol} {body.zodiac}", f"{body.zodiac_orb}°", f"{body.retrograde}"] for body in atlas_data['Centaur'].values()]
 
 		centaur_tab = tabulate(centaur, headers=['Celestial Body', 'Zodiac', 'Orb', 'Retrograde'])
 		print(centaur_tab)
 
 	def neptunian(self, atlas_data):
-		neptunian = [
-		["✧ Quaoar", f"{atlas_data['Neptunian']['Quaoar'].zodiac_symbol} {atlas_data['Neptunian']['Quaoar'].zodiac}", f"{atlas_data['Neptunian']['Quaoar'].zodiac_orb}°", f"{atlas_data['Neptunian']['Quaoar'].retrograde}"],
-		["† Logos & Zoe", f"{atlas_data['Neptunian']['Logos'].zodiac_symbol} {atlas_data['Neptunian']['Logos'].zodiac}", f"{atlas_data['Neptunian']['Logos'].zodiac_orb}°", f"{atlas_data['Neptunian']['Logos'].retrograde}"],
-		["⯲ Sedna", f"{atlas_data['Neptunian']['Sedna'].zodiac_symbol} {atlas_data['Neptunian']['Sedna'].zodiac}", f"{atlas_data['Neptunian']['Sedna'].zodiac_orb}°", f"{atlas_data['Neptunian']['Sedna'].retrograde}"],
-		["🗝 Orcus", f"{atlas_data['Neptunian']['Orcus'].zodiac_symbol} {atlas_data['Neptunian']['Orcus'].zodiac}", f"{atlas_data['Neptunian']['Orcus'].zodiac_orb}°", f"{atlas_data['Neptunian']['Orcus'].retrograde}"],
-		["∿ Salacia", f"{atlas_data['Neptunian']['Salacia'].zodiac_symbol} {atlas_data['Neptunian']['Salacia'].zodiac}", f"{atlas_data['Neptunian']['Salacia'].zodiac_orb}°", f"{atlas_data['Neptunian']['Salacia'].retrograde}"],
-		["୭ Haumea", f"{atlas_data['Neptunian']['Haumea'].zodiac_symbol} {atlas_data['Neptunian']['Haumea'].zodiac}", f"{atlas_data['Neptunian']['Haumea'].zodiac_orb}°", f"{atlas_data['Neptunian']['Haumea'].retrograde}"],
-		["⯱ Eris", f"{atlas_data['Neptunian']['Eris'].zodiac_symbol} {atlas_data['Neptunian']['Eris'].zodiac}", f"{atlas_data['Neptunian']['Eris'].zodiac_orb}°", f"{atlas_data['Neptunian']['Eris'].retrograde}"],
-		["𓆇 Makemake", f"{atlas_data['Neptunian']['Makemake'].zodiac_symbol} {atlas_data['Neptunian']['Makemake'].zodiac}", f"{atlas_data['Neptunian']['Makemake'].zodiac_orb}°", f"{atlas_data['Neptunian']['Makemake'].retrograde}"],
-		["༄ Gonggong", f"{atlas_data['Neptunian']['Gonggong'].zodiac_symbol} {atlas_data['Neptunian']['Gonggong'].zodiac}", f"{atlas_data['Neptunian']['Gonggong'].zodiac_orb}°", f"{atlas_data['Neptunian']['Gonggong'].retrograde}"],
-		]
+		neptunian = [[f"{body.symbol} {body.name}", f"{body.zodiac_symbol} {body.zodiac}", f"{body.zodiac_orb}°", f"{body.retrograde}"] for body in atlas_data["Neptunian"].values()]
 
 		neptunian_tab = tabulate(neptunian, headers=['Celestial Body', 'Zodiac', 'Orb', 'Retrograde'])
 		print(neptunian_tab)
 
 	def lunar(self, atlas_data):
 		phase = [
-		["☽ Lunar Phase", f"{atlas_data['Lunar']['Moon'].phase_symbol} {atlas_data['Lunar']['Moon'].phase}", f"{atlas_data['Lunar']['Moon'].phase_longitude}°"],
+		["☽ Lunar Phase", f"{atlas_data['Celestial']['Moon'].phase_symbol} {atlas_data['Celestial']['Moon'].phase}", f"{atlas_data['Celestial']['Moon'].phase_longitude}°"],
 		]
 		
-		node = [
-		["☊ Rahu", f"{atlas_data['Lunar']['ASC'].zodiac_symbol} {atlas_data['Lunar']['ASC'].zodiac}", f"{atlas_data['Lunar']['ASC'].zodiac_orb}°"],
-		["☋ Ketu", f"{atlas_data['Lunar']['DSC'].zodiac_symbol} {atlas_data['Lunar']['DSC'].zodiac}", f"{atlas_data['Lunar']['DSC'].zodiac_orb}°"],
-		["⚸ Lilith", f"{atlas_data['Lunar']['Lilith'].zodiac_symbol} {atlas_data['Lunar']['Lilith'].zodiac}", f"{atlas_data['Lunar']['Lilith'].zodiac_orb}°"],
-		["⯝ Selena", f"{atlas_data['Lunar']['Selena'].zodiac_symbol} {atlas_data['Lunar']['Selena'].zodiac}", f"{atlas_data['Lunar']['Selena'].zodiac_orb}°"],
-		]
+		node = [[f"{body.symbol} {body.name}", f"{body.zodiac_symbol} {body.zodiac}", f"{body.zodiac_orb}°"] for body in atlas_data["Lunar"].values()]
 
 		phase_tab = tabulate(phase, headers=['Moon', 'Phase', 'Phase Angle'])
 		node_tab = tabulate(node, headers=['Node', 'Zodiac', 'Orb'])
 		print(phase_tab + "\n\n" + node_tab)
+
+	def lot(self, atlas_data):
+		lot = [[f"{lot.symbol} {lot.name}", f"{lot.zodiac_symbol} {lot.zodiac}", f"{lot.zodiac_orb}°"] for lot in atlas_data['Lot'].values()]
+
+		lot_tab = tabulate(lot, headers=['Lot', 'Zodiac', 'Orb'])
+		print(lot_tab)
 
 	def aspect(self, atlas_data):
 		output = []
@@ -262,8 +327,9 @@ class Console:
 		4: self.centaur,
 		5: self.neptunian,
 		6: self.lunar,
-		7: self.aspect,
-		8: lambda _: 'chart',
+		7: self.lot,
+		8: self.aspect,
+		9: lambda _: 'chart',
 		0: lambda _: 'exit'
 		}
 
@@ -272,7 +338,7 @@ class Console:
 		if choice_info in portal:
 			return portal[choice_info](atlas_data)
 
-	def generate(self, t, location): # Generating Ephemeris
+	def generate_data(self, t, location): # Generating Ephemeris
 		placidus = self.atlas.placidus(t, location)
 		celestial = self.atlas.celestial(t, location)
 		asteroid = self.atlas.asteroid(t, location)
@@ -280,12 +346,13 @@ class Console:
 		neptunian = self.atlas.neptunian(t, location)
 		lunar = self.atlas.lunar(t, location)
 		aspects = aspect({**celestial, **lunar})
+		lots = self.atlas.lot(placidus, celestial)
 		houses = house(placidus, {**celestial, **lunar})
 
 		atlas_data = {
 		'Placidus': placidus, 'Celestial': celestial, 'Asteroid': asteroid, 
 		'Centaur': centaur, 'Neptunian': neptunian, 'Lunar': lunar, 
-		'Aspect': aspects, 'House': houses
+		'Lot': lots, 'Aspect': aspects, 'House': houses
 		}
 
 		return atlas_data
@@ -297,7 +364,7 @@ class Console:
 				t_i = datetime.now() # Initializing current time
 				location = self.location_input() # Enter location
 				t = utc(t_i, location)
-				atlas_data = self.generate(t, location)
+				atlas_data = self.generate_data(t, location)
 
 				while True:
 					choice_info = self.info_menu()
@@ -305,7 +372,7 @@ class Console:
 					if portal == 'exit':
 						break
 					elif portal == 'chart':
-						chart = Chart(atlas_data['Placidus'], {**atlas_data['Celestial'], **atlas_data['Lunar']})
+						chart = Chart(atlas_data['Placidus'], {**atlas_data['Celestial'], **atlas_data['Lunar'], **atlas_data['Lot']})
 						chart.generate(show=True, save=False)
 						continue
 
@@ -313,7 +380,7 @@ class Console:
 				t_i = self.datetime_input()
 				location = self.location_input()
 				t = utc(t_i, location)
-				atlas_data = self.generate(t, location)
+				atlas_data = self.generate_data(t, location)
 				
 				while True:
 					choice_info = self.info_menu()
@@ -321,10 +388,22 @@ class Console:
 					if portal == 'exit':
 						break
 					elif portal == 'chart':
-						chart = Chart(atlas_data['Placidus'], {**atlas_data['Celestial'], **atlas_data['Lunar']})
+						chart = Chart(atlas_data['Placidus'], {**atlas_data['Celestial'], **atlas_data['Lunar'], **atlas_data['Lot']})
 						chart.generate(show=True, save=False)
 						continue
 
 			elif choice_main == '3':
+				while True:
+					choice_config = self.config_menu()
+					if choice_config == '1':
+						choice_config_chart = self.config_chart()
+						if choice_config_chart == '1':
+							self.config_chart_bodies()
+						elif choice_config_chart == '2':
+							break
+					elif choice_config == '2':
+						break
+
+			elif choice_main == '4':
 				break
 
