@@ -1,0 +1,177 @@
+
+/* GENERAL */
+.root {
+    -fx-text-fill: white;
+    -fx-background-color: #454545;
+    -fx-font-family: SansSerif;
+}
+
+/* INPUT TOOLBAR */
+#input-toolbar {
+    -fx-background-color: #252525;
+    -fx-border-color: #2e2e2e;
+    -fx-border-width: 3px 0 0 0;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+/* MODULE TOOLBAR */
+#module-toolbar {
+    -fx-background-color: #252525;
+    -fx-border-color: #2e2e2e;
+    -fx-border-width: 0 3px 0 0;
+    -fx-alignment: top-center;
+    -fx-spacing: 20px;
+    -fx-padding: 10px;
+}
+
+/* Module toolbar icons */
+#celestial-module-button {
+    -fx-background-color: #4e4e4e;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 50px;
+    -fx-pref-height:  50px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 20px;
+}
+
+#eclipse-module-button {
+    -fx-background-color: #4e4e4e;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 50px;
+    -fx-pref-height:  50px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 20px;
+}
+
+#chart-module-button {
+    -fx-background-color: #4e4e4e;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 50px;
+    -fx-pref-height:  50px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 20px;
+}
+
+
+/* INFO PANELS */
+#info-panel {
+    -fx-background-color: #404040;
+    -fx-border-color: #2e2e2e;
+    -fx-border-width: 0 3px 0 3px;
+    -fx-border-radius: 5px;
+}
+
+#general-box {
+    -fx-alignment: top-center;
+}
+
+#chart-box {
+    -fx-border-color: #2e2e2e;
+    -fx-border-width: 0 0 0 3px;
+}
+
+#chart-view {
+    -fx-border-color: #2e2e2e;
+    -fx-border-width: 3px;
+    -fx-alignment: bottom-right;
+}
+
+#info-grid {
+    -fx-alignment: center;
+    -fx-padding: 50px;
+    -fx-font-size: 20px;
+}
+
+#celestial-name {
+    -fx-font-weight: 700;
+    -fx-font-size: 32px;
+    -fx-alignment: center-left;
+    -fx-padding: 50px;
+    -fx-text-fill: white;
+}
+
+#property-label {
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+}
+
+#value-label {
+    -fx-text-fill: white;
+}
+
+/* Left tab */
+#left-tab {
+    -fx-alignment: center;
+    -fx-width: 400;
+}
+
+#left-tab .label {
+    -fx-padding: 10;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+    -fx-font-size: 26px;
+    -fx-alignment: center;
+}
+
+.list-view {
+    -fx-font-size: 24px;
+    -fx-font-weight: 600;
+    -fx-background-color: #454545;
+    -fx-control-inner-background: #404040;
+    -fx-accent: #d0b4e8;
+    -fx-pref-width: 300;
+}
+
+.list-view .list-cell {
+    -fx-alignment: center;
+}
+
+
+#time-input {
+    -fx-pref-width: 80;
+
+}
+
+#current-time-toggle {
+    -fx-text-fill: white;
+    -fx-padding: 0 5px
+
+}
+
+#date-time-box {
+    -fx-padding: 0 30px;
+}
+
+#coords-toggle {
+    -fx-text-fill: white;
+    -fx-padding: 0 5px;
+}
+
+#toggle-box {
+    -fx-padding: 0 30px 0 0px;
+
+}
+
+#toggle-box .label {
+    -fx-text-fill: white;
+    -fx-padding: 0 10px;
+}
+
+#longitude-input {
+    -fx-pref-width: 50px;
+}
+
+#latitude-input {
+    -fx-pref-width: 50px;
+}
+
