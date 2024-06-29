@@ -7,7 +7,7 @@ from atlas.atlas import Atlas
 from atlas.topo import Location
 from atlas.chrono import utc
 from atlas.analysis import find_aspects, find_lots
-from atlas.chart import Chart
+from atlas.chart import NatalChart
 from atlas.objects import Location
 
 
@@ -93,11 +93,11 @@ class Console:
         while True:
             print("""
 |====================|
-| 🝶 Eclipse Input 🝶 |
+| 🝵 Eclipse Input 🝶 |
 |====================|\n
                 """)
             
-            eclipses = [['1', '☉ Solar'], ['2', '☽ Lunar']]
+            eclipses = [['1', '🝵 Solar'], ['2', '🝶 Lunar']]
             eclipse_tab = tabulate(eclipses)
             print(eclipse_tab + "\n")
 
@@ -117,9 +117,9 @@ class Console:
         self.clear()
         while True:
             print("""
-|====================|
-| 🝶 Placidus Input 🝶 |
-|====================|\n
+|=====================|
+| 🜨︎ Placidus Input 🜨︎ |
+|=====================|\n
                 """)
             
             placidus = [['1', '🌴 Tropical'], ['2', '🛞 Sidereal']]
@@ -148,8 +148,7 @@ class Console:
             
             menu = [
             ['1', "🜨︎ Horoscope"],
-            ['2', "☉ Celestial"],
-            ['3', "🝶 Eclipse"],
+            ['2', "🝵 Occultation"],
             ['0', "≡ Exit"],
             ]
 
@@ -157,7 +156,7 @@ class Console:
             print(menu_tab)
 
             # User Input
-            choices = ['0', '1', '2', '3']
+            choices = ['0', '1', '2']
             choice = input("\n Choose Ephemeris:\n")
             if choice in choice:
                 self.clear()
@@ -201,12 +200,12 @@ class Console:
         while True:
             print("""
 |=========================|
-| 🝶 Eclipse Ephemeris 🝶  |
+| 🝵 Eclipse Ephemeris 🝶  |
 |=========================|
             """)
 
             menu = [
-            ['1', "🝶 General"],
+            ['1', "🝵 General"],
             ['2', "🌕︎ Phases"],
             ['0', "≡ Main Menu"]
             ]
@@ -315,7 +314,7 @@ class Console:
             portal = self.horoscope_portal(choice_info, celestial_data)
             if portal == 'chart':
                 self.clear()
-                chart = Chart(celestial_data['Placidus'], {**celestial_data['Celestial'], **celestial_data['Lunar']})
+                chart = NatalChart(celestial_data['Placidus'], {**celestial_data['Celestial'], **celestial_data['Lunar']})
                 chart.generate(show=True, save=False)
                 continue
             elif portal == 'exit':

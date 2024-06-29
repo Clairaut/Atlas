@@ -1,7 +1,7 @@
 from geopy.geocoders import Nominatim
 
 class Location:
-    def __init__(self, longitude=None, latitude=None, altitude=None):
+    def __init__(self, longitude=None, latitude=None, altitude=0):
         self.longitude = longitude
         self.latitude = latitude
         self.altitude = altitude

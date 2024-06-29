@@ -51,6 +51,8 @@ class Node:
 class Celestial(Node):
         def __init__(self, name, symbol):
             super().__init__(name, symbol)
+            self.ra = None
+            self.dec = None
             self.distance = None
             self.latitude = None
             self.longitude_speed = None
@@ -77,6 +79,8 @@ class Celestial(Node):
         def to_dict(self):
             data = super().to_dict()
             data.update({
+                'ra': self.ra,
+                'dec': self.dec,
                 'distance': self.distance,
                 'latitude': self.latitude,
                 'longitude_speed': self.longitude_speed,

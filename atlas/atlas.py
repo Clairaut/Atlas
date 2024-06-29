@@ -32,8 +32,8 @@ class Atlas:
         else:
             return None
 
-    def create_placidus(self, t, location, tropical):
-        cusps, ascmc = self.eph.observe_placidus(t, location)
+    def create_placidus(self, t, location, tropical=True):
+        cusps, _ = self.eph.observe_placidus(t, location)
         placidus = dict()
 
         ayanamsa = self.get_ayanamsa(t, tropical)

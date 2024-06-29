@@ -58,7 +58,7 @@ class Ephemeris:
         target_id = self.find_celestial_id(target)
         
         # Computing celestial position
-        pos = swe.calc_ut(t_jd, target_id)
+        pos = swe.calc_ut(t_jd, target_id, swe.FLG_EQUATORIAL)
 
         ra = pos[0][0]
         dec = pos[0][1]
