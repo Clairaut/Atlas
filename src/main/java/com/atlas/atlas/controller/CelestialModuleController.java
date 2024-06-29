@@ -43,7 +43,7 @@ public class CelestialModuleController implements CelestialSelectionListener {
 
     public void handleSubmit(String date, String time, String location, Boolean tropical) {
         celestialTab.clearCelestials();
-        String targets = "Sun,Moon,Mercury,Venus,Mars,Jupiter,Saturn,Uranus,Neptune,Pluto,Ceres,Pallas,Juno,Vesta";
+        String targets = "Sun,Moon,Mercury,Venus,Mars,Jupiter,Saturn,Uranus,Neptune,Pluto,Chiron,Ceres,Pallas,Juno,Vesta";
         List<CelestialData> celestialList = celestialDataService.fetchData(date, time, location, targets, tropical, "individual");
         for (CelestialData celestial : celestialList) {
             celestialTab.addCelestial(celestial);

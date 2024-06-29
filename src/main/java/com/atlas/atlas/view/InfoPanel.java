@@ -1,7 +1,5 @@
 package com.atlas.atlas.view;
 
-import com.atlas.atlas.model.CelestialData;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
@@ -18,7 +16,6 @@ public class InfoPanel extends BorderPane {
     protected final VBox generalBox;
     protected final HBox chartBox;
     protected final ImageView chartView = new ImageView();
-    protected GridPane infoGrid;
 
     public InfoPanel() {
         this.setId("info-panel");
@@ -26,10 +23,8 @@ public class InfoPanel extends BorderPane {
         // View components
         this.generalBox = new VBox();
         this.chartBox = new HBox();
-        this.infoGrid = new GridPane();
 
         generalBox.setId("general-box");
-        infoGrid.setId("info-grid");
         chartBox.setId("chart-box");
         chartView.setId("chart-view");
 
@@ -46,18 +41,11 @@ public class InfoPanel extends BorderPane {
             chartBox.setPrefWidth(newVal.doubleValue());
         });
 
-        // Ensure chartBox does not resize beyond its content
         chartBox.getChildren().add(chartView);
 
         // Set generalBox in the center and chartBox on the right
         this.setCenter(generalBox);
         this.setRight(chartBox);
-    };
-
-    public void clearData() {
-        generalBox.getChildren().clear();
-        infoGrid.getChildren().clear();
-        chartView.setImage(null);
     }
 
     public void updateChart(String chartName) {
@@ -83,22 +71,26 @@ public class InfoPanel extends BorderPane {
     }
 
     protected String formatDouble(double value) {
-        return String.format("%.2f", value);
+        return String.format("%.4f", value);
     }
 
-    protected void addProperty(String label, String value, int row) {
+    protected String formatRA (double ra) {
+        double raHours = ra / 15;
+        int hours = (int) raHours;
+        int minutes = (int) ((raHours - hours) * 60);
+        int seconds = (int) (((((raHours - hours) * 60) - minutes) * 60));
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    protected void addProperty(GridPane grid, String label, String value, int row) {
         Label propertyLabel = new Label(label);
         Label valueLabel = new Label(value);
 
         propertyLabel.setId("property-label");
         valueLabel.setId("value-label");
 
-        infoGrid.add(propertyLabel, 0, row);
-        infoGrid.add(valueLabel, 1, row);
+        grid.add(propertyLabel, 0, row);
+        grid.add(valueLabel, 1, row);
     }
 }
-
-
-
-
-

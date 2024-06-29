@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class MiddlewareService {
-
     public String executePythonScript(String scriptName, String... args) {
         String jsonResponse = "";
         try {

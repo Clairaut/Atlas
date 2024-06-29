@@ -22,6 +22,7 @@ public class EclipseModuleController {
         this.controller = controller;
         this.eclipsePanel = new EclipsePanel();
         this.eclipseDataService = new EclipseDataService();
+        this.celestialDataService = new CelestialDataService();
     }
 
     public void showEclipseView() {
@@ -37,9 +38,22 @@ public class EclipseModuleController {
 
     public void handleSubmit(String date, String time, String location, Boolean tropical, Boolean solar) {
         EclipseData eclipse = eclipseDataService.fetchData(date, time, location, solar);
-        List <CelestialData> celestials = celestialDataService.fetchData(date, time, location, "Sun,Moon", tropical, "combined");
+        String eclipseDateTime = eclipse.getTimeMax();
+
+        String[] dateTimeParts = eclipseDateTime.split(" ");
+        String eclipseDate = dateTimeParts[0];
+        String eclipseTime = dateTimeParts[1];
+
+        List <CelestialData> celestials = celestialDataService.fetchData(eclipseDate, eclipseTime, location, "Sun,Moon", tropical, "combined");
+
         eclipsePanel.updateEclipse(eclipse);
         eclipsePanel.updateCelestials(celestials);
+
+        StringBuilder combinedName = new StringBuilder();
+        for (CelestialData celestial : celestials) {
+            combinedName.append(celestial.getName());
+        }
+        eclipsePanel.updateChart(combinedName.toString());
     }
 
 }
