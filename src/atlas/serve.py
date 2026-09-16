@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 # Internal Modules
 from atlas.core.atlas import Atlas
+from atlas.models.aspect import build_aspects, build_transit_aspects
 from atlas.utils.config import load_config
 
 if TYPE_CHECKING:
@@ -46,6 +47,28 @@ def create_app() -> "FastAPI":
             except ValueError:
                 continue
         raise ValueError(f"unrecognized datetime format: '{s}'")
+
+    # Locate the requested bodies at one moment, keyed by target name
+    def _locate(dt: datetime, location: tuple, zodiac: str, targets: "list[str]") -> "dict":
+        celestials = {}
+        for target in targets:
+            if target not in _available_celestials:
+                continue
+
+            celestials[target] = _atlas.locate(
+                dt         = dt,
+                location   = location,
+                target     = target,
+                zodiac     = zodiac,
+                properties = ["position", "phenomenon"],
+                systems    = ["ecliptic"],
+            )
+
+        return celestials
+
+    # Split a comma-separated target list, falling back to everything configured
+    def _resolve_targets(targets: str) -> "list[str]":
+        return [target.strip().lower() for target in targets.split(",") if target.strip()] or _available_celestials
 
 
     # Return house cusps for a given time, location, and house system
@@ -89,39 +112,81 @@ def create_app() -> "FastAPI":
         lon: float = _lon,
         alt: float = _alt,
     ):
-        target_names: list[str] = [t.strip().lower() for t in targets.split(",") if t.strip()] or _available_celestials
+        targets = _resolve_targets(targets)
         try:
             now = _parse_dt(at) if at else datetime.now(timezone.utc)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
 
         location = (lat, lon, alt)
-        bodies   = {}
 
         try:
             with _lock:
                 _ensure_ephe_path()
-                for target in target_names:
-                    if target not in _available_celestials:
-                        continue
-
-                    state = _atlas.locate(
-                        dt         = now,
-                        location   = location,
-                        target     = target,
-                        zodiac     = zodiac,
-                        properties = ["position", "phenomenon"],
-                        systems    = ["ecliptic"],
-                    )
-
-                    bodies[target] = state.dict()
+                bodies = _locate(now, location, zodiac, targets)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
 
         return {
             "dt":       now.isoformat(),
             "location": {"lat": lat, "lon": lon, "alt": alt},
-            "bodies":   bodies,
+            "bodies":   {name: state.dict() for name, state in bodies.items()},
+        }
+
+    # Return aspects within one chart, or — given transit_at — the aspects a second
+    # moment makes to it. Either date is arbitrary: natal and now are just the common pair.
+    @app.get("/aspects")
+    def compare(
+        targets:     str   = "",
+        at:          str   = "",
+        transit_at:  str   = "",
+        zodiac:      str   = "tropical",
+        lat:         float = _lat,
+        lon:         float = _lon,
+        alt:         float = _alt,
+        transit_lat: float = _lat,
+        transit_lon: float = _lon,
+        transit_alt: float = _alt,
+    ):
+        targets = _resolve_targets(targets)
+
+        try:
+            chart_dt   = _parse_dt(at) if at else datetime.now(timezone.utc)
+            transit_dt = _parse_dt(transit_at) if transit_at else None
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e)) from e
+
+        location = (lat, lon, alt)
+
+        try:
+            with _lock:
+                _ensure_ephe_path()
+                chart = list(_locate(chart_dt, location, zodiac, targets).values())
+
+                if transit_dt is None:
+                    found = build_aspects(chart)
+                else:
+                    transit = list(_locate(transit_dt, (transit_lat, transit_lon, transit_alt), zodiac, targets).values())
+                    found   = build_transit_aspects(chart, transit)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e)) from e
+
+        # In transit mode `one` is always the `at` chart and `two` the transiting body
+        return {
+            "dt":         chart_dt.isoformat(),
+            "transit_dt": transit_dt.isoformat() if transit_dt else None,
+            "mode":       "transit" if transit_dt else "chart",
+            "location":   {"lat": lat, "lon": lon, "alt": alt},
+            "aspects": [
+                {
+                    "name":  a.name,
+                    "glyph": a.glyph,
+                    "orb":   round(a.orb, 4),
+                    "one":   {"name": a.body_one.name, "glyph": a.body_one.glyph, "lon": a.body_one.lon},
+                    "two":   {"name": a.body_two.name, "glyph": a.body_two.glyph, "lon": a.body_two.lon},
+                }
+                for a in found
+            ],
         }
 
     return app

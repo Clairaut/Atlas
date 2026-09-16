@@ -229,14 +229,38 @@ atlas serve [options]
 | `--host` | Bind host (default `127.0.0.1`) |
 | `--port` | Bind port (default `5001`) |
 
-**Endpoint:** `GET /observe`
+Request params naming datetimes end in `_at`; the matching response fields end
+in `_dt`. Every endpoint shares `zodiac` and `lat` / `lon` / `alt`, which fall
+back to the config values.
 
-| Param | Description |
+| Shared param | Description |
 |-------|-------------|
 | `at` | Datetime `YYYY-MM-DD[THH:MM:SS]` (default: now) |
 | `targets` | Comma-separated body names (default: all configured) |
 | `zodiac` | `tropical` (default) or `sidereal` |
 | `lat` / `lon` / `alt` | Observer location (default: config values) |
+
+**`GET /observe`** — positions and phenomena per body.
+
+**`GET /cast`** — house cusps.
+
+| Param | Description |
+|-------|-------------|
+| `hsys` | `placidus` (default), `koch`, `porphyry`, `regiomontanus`, `campanus`, `equal`, `whole` / `wholesign` / `ws` |
+
+**`GET /aspects`** — aspects within one chart, or those a second moment makes
+to it. Natal-and-now is only the common pair: both dates are arbitrary, so the
+same endpoint answers "what did these two dates have in common" and "what is
+happening to my chart today".
+
+| Param | Description |
+|-------|-------------|
+| `transit_at` | Second datetime. Omit it for a single chart's own aspects |
+| `transit_lat` / `transit_lon` / `transit_alt` | Location for the transiting chart |
+
+`mode` in the response is `chart` when `transit_at` is omitted and `transit`
+when it is given. In transit mode `one` is always the `at` chart and `two` the
+transiting body.
 
 ```bash
 atlas serve                          # start on 127.0.0.1:5001
@@ -246,6 +270,12 @@ uvicorn atlas.serve:create_app --factory --host 127.0.0.1 --port 5001
 curl "http://127.0.0.1:5001/observe"
 curl "http://127.0.0.1:5001/observe?targets=sun,moon&at=1999-09-29T12:00:00"
 curl "http://127.0.0.1:5001/observe?zodiac=sidereal&lat=48.85&lon=2.35"
+
+curl "http://127.0.0.1:5001/cast?hsys=wholesign"
+
+curl "http://127.0.0.1:5001/aspects"                                    # today's own aspects
+curl "http://127.0.0.1:5001/aspects?at=1999-08-11&transit_at=2026-09-16" # transits to a chart
+curl "http://127.0.0.1:5001/aspects?at=2026-12-25&transit_at=2027-04-01" # any two dates
 ```
 
 ---
