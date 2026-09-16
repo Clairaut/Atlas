@@ -248,7 +248,7 @@ back to the config values.
 |-------|-------------|
 | `hsys` | `placidus` (default), `koch`, `porphyry`, `regiomontanus`, `campanus`, `equal`, `whole` / `wholesign` / `ws` |
 
-**`GET /aspects`** — aspects within one chart, or those a second moment makes
+**`GET /compare`** — aspects within one chart, or those a second moment makes
 to it. Natal-and-now is only the common pair: both dates are arbitrary, so the
 same endpoint answers "what did these two dates have in common" and "what is
 happening to my chart today".
@@ -273,9 +273,9 @@ curl "http://127.0.0.1:5001/observe?zodiac=sidereal&lat=48.85&lon=2.35"
 
 curl "http://127.0.0.1:5001/cast?hsys=wholesign"
 
-curl "http://127.0.0.1:5001/aspects"                                    # today's own aspects
-curl "http://127.0.0.1:5001/aspects?at=1999-08-11&transit_at=2026-09-16" # transits to a chart
-curl "http://127.0.0.1:5001/aspects?at=2026-12-25&transit_at=2027-04-01" # any two dates
+curl "http://127.0.0.1:5001/compare"                                    # today's own aspects
+curl "http://127.0.0.1:5001/compare?at=1999-08-11&transit_at=2026-09-16" # transits to a chart
+curl "http://127.0.0.1:5001/compare?at=2026-12-25&transit_at=2027-04-01" # any two dates
 ```
 
 ---

@@ -135,7 +135,7 @@ def create_app() -> "FastAPI":
 
     # Return aspects within one chart, or — given transit_at — the aspects a second
     # moment makes to it. Either date is arbitrary: natal and now are just the common pair.
-    @app.get("/aspects")
+    @app.get("/compare")
     def compare(
         targets:     str   = "",
         at:          str   = "",
